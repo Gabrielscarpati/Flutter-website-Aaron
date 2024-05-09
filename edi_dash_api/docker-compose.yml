@@ -1,13 +1,13 @@
 version: '3'
 
 services:
-  edi_dash:
+  edi_dash_api:
     container_name: api
     env_file: .env
     build: 
       context: .
       dockerfile: dockerfile
-    image: edi-dash-image
+    image: edi_dash_image
     volumes:
       - .:/app
       - /app/node_modules
@@ -18,5 +18,5 @@ services:
 
 networks:
   edi_dash_network:
-    name: edi-dash-network
+    name: edi_dash_network
     driver: bridge

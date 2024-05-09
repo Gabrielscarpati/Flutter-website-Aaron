@@ -49,7 +49,25 @@ app.use((req, res, next) => {
 
 app.get('/', async (_, res) => {
     try {
-        connection.query('SELECT * FROM seller', function (error, results, _fields) {
+        connection.query('select * from admin', function (error, results, _fields) {
+            if (error) {
+                res.json({
+                    error
+                });
+            } else {
+                res.json(results);
+            }
+        });
+    } catch (error) {
+        res.json({
+            error
+        });
+    }
+});
+
+app.get('/sellers', async (_, res) => {
+    try {
+        connection.query('select * from seller', function (error, results, _fields) {
             if (error) {
                 res.json({
                     error
