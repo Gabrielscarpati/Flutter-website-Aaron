@@ -9,41 +9,41 @@ class TransactionHistory extends StatefulWidget {
 }
 
 class _TransactionHistoryState extends State<TransactionHistory> {
-  List<DataTest> dataList = [
-    DataTest(
+  List<OrderTest> orderList = [
+    OrderTest(
         date: 'Date 1',
         numberOrder: 1,
         document: 1,
         sendReceived: 'Send Received 1',
         status: 'Status 1'),
-    DataTest(
+    OrderTest(
         date: 'Date 2',
         numberOrder: 2,
         document: 2,
         sendReceived: 'Send Received 2',
         status: 'Status 2'),
-    DataTest(
+    OrderTest(
         date: 'Date 3',
         numberOrder: 3,
         document: 3,
         sendReceived: 'Send Received 3',
         status: 'Status 3'),
-    DataTest(
+    OrderTest(
         date: 'Date 4',
         numberOrder: 4,
         document: 4,
         sendReceived: 'Send Received 4',
         status: 'Status 4'),
-    DataTest(
+    OrderTest(
         date: 'Date 5',
         numberOrder: 5,
         document: 5,
         sendReceived: 'Send Received 5',
         status: 'Status 5'),
   ];
-
+  List<ErrorTest> errorList = [];
   bool sort = true;
-  List<DataTest>? filterData;
+  List<OrderTest>? filterData;
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -59,7 +59,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
 
   @override
   void initState() {
-    filterData = dataList;
+    filterData = orderList;
     super.initState();
   }
 
@@ -85,113 +85,268 @@ class _TransactionHistoryState extends State<TransactionHistory> {
         ],
       )),
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(15.0),
-          decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              TextField(
-                controller: _searchController,
-                onChanged: (value) {
-                  setState(() {
-                    dataList = filterData!
-                        .where((element) => element.numberOrder.toString().contains(value))
-                        .toList();
-                  });
-                },
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColors.secondaryColor.withOpacity(0.3),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: "Search for a Seller",
-                    prefixIcon: const Icon(Icons.search),
-                    prefixIconColor: Colors.black,
-                    suffixIcon: IconButton(
-                        icon: const Icon(Icons.close, color: Colors.black),
-                        onPressed: () async {
-                          _searchController.clear();
-                          setState(() {
-                            dataList = filterData!
-                                .where((element) => element.numberOrder.toString().contains(""))
-                                .toList();
-                          });
-                        })),
-              ),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: Theme(
-                    data: ThemeData.light()
-                        .copyWith(cardColor: Theme.of(context).canvasColor),
-                    child: PaginatedDataTable(
-                      sortColumnIndex: 0,
-                      sortAscending: sort,
-                      source:
-                          RowSource(dataList: dataList, count: dataList.length),
-                      rowsPerPage: dataList.isEmpty ? 1 : dataList.length,
-                      columnSpacing: 8,
-                      columns: [
-                        DataColumn(
-                            label: const Text(
-                              'Date/Time',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 14),
-                            ),
-                            onSort: ((columnIndex, ascending) {
-                              setState(() {
-                                sort = !sort;
-                                sortColumn(columnIndex, ascending);
-                              });
-                            })),
-                        const DataColumn(
-                            label: Text(
-                          'Order number',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14),
-                        )),
-                        const DataColumn(
-                            label: Text(
-                          'Document',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14),
-                        )),
-                        const DataColumn(
-                            label: Text(
-                          'Sent/Received',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14),
-                        )),
-                        const DataColumn(
-                            label: Center(
-                          child: Text(
-                            '997',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                padding: const EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          orderList = filterData!
+                              .where((element) => element.numberOrder
+                                  .toString()
+                                  .contains(value))
+                              .toList();
+                        });
+                      },
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppColors.secondaryColor.withOpacity(0.3),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
                           ),
-                        )),
-                      ],
-                    )),
-              )
-            ],
-          ),
+                          hintText: "Search for a Order number",
+                          prefixIcon: const Icon(Icons.search),
+                          prefixIconColor: Colors.black,
+                          suffixIcon: IconButton(
+                              icon:
+                                  const Icon(Icons.close, color: Colors.black),
+                              onPressed: () async {
+                                _searchController.clear();
+                                setState(() {
+                                  orderList = filterData!
+                                      .where((element) => element.numberOrder
+                                          .toString()
+                                          .contains(""))
+                                      .toList();
+                                });
+                              })),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Theme(
+                          data: ThemeData.light().copyWith(
+                              cardColor: Theme.of(context).canvasColor),
+                          child: PaginatedDataTable(
+                            sortColumnIndex: 0,
+                            sortAscending: sort,
+                            source: RowSource(
+                                dataList: orderList, count: orderList.length),
+                            rowsPerPage:
+                                orderList.isEmpty ? 1 : orderList.length,
+                            columnSpacing: 8,
+                            columns: [
+                              DataColumn(
+                                  label: const Text(
+                                    'Date/Time',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14),
+                                  ),
+                                  onSort: ((columnIndex, ascending) {
+                                    setState(() {
+                                      sort = !sort;
+                                      sortColumn(columnIndex, ascending);
+                                    });
+                                  })),
+                              const DataColumn(
+                                  label: Text(
+                                'Order number',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              const DataColumn(
+                                  label: Text(
+                                'Document',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              const DataColumn(
+                                  label: Text(
+                                'Sent/Received',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              const DataColumn(
+                                  label: Center(
+                                child: Text(
+                                  '997',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              )),
+                            ],
+                          )),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: const EdgeInsets.all(30.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(15.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).canvasColor,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: const Text(
+                        'WARNINGS',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Theme(
+                          data: ThemeData.light().copyWith(
+                              cardColor: Theme.of(context).canvasColor),
+                          child: PaginatedDataTable(
+                            sortColumnIndex: 0,
+                            sortAscending: sort,
+                            source: RowSource<ErrorTest>(
+                                dataList: errorList, count: errorList.length),
+                            rowsPerPage:
+                                errorList.isEmpty ? 1 : errorList.length,
+                            columnSpacing: 8,
+                            columns: const [
+                              DataColumn(
+                                label: Text(
+                                  'Date',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              ),
+                              DataColumn(
+                                  label: Text(
+                                'Task Description',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                'Document',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                'ID',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              DataColumn(
+                                  label: Center(
+                                child: Text(
+                                  'Error',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              )),
+                            ],
+                          )),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class RowSource extends DataTableSource {
-  var dataList;
-  final count;
+abstract class JsonSerializable {
+  Map<String, dynamic> toJson();
+}
+
+class OrderTest extends JsonSerializable {
+  final String date;
+  final int numberOrder;
+  final int document;
+  final String sendReceived;
+  final String status;
+
+  OrderTest({
+    required this.date,
+    required this.numberOrder,
+    required this.document,
+    required this.sendReceived,
+    required this.status,
+  });
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date,
+      'numberOrder': numberOrder,
+      'document': document,
+      'sendReceived': sendReceived,
+      'status': status,
+    };
+  }
+}
+
+class ErrorTest extends JsonSerializable {
+  final String date;
+  final String taskDescription;
+  final String id;
+  final String error;
+
+  ErrorTest({
+    required this.date,
+    required this.taskDescription,
+    required this.id,
+    required this.error,
+  });
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date,
+      'taskDescription': taskDescription,
+      'id': id,
+      'error': error,
+    };
+  }
+}
+
+class RowSource<T extends JsonSerializable> extends DataTableSource {
+  final List<T> dataList;
+  final int count;
   RowSource({
     required this.dataList,
     required this.count,
@@ -216,28 +371,14 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(var data) {
-  return DataRow(cells: [
-    DataCell(Text(data.date)),
-    DataCell(Text(data.numberOrder.toString())),
-    DataCell(Text(data.document.toString())),
-    DataCell(Text(data.sendReceived)),
-    DataCell(Text(data.status)),
-  ]);
-}
-
-class DataTest {
-  final String date;
-  final int numberOrder;
-  final int document;
-  final String sendReceived;
-  final String status;
-
-  DataTest({
-    required this.date,
-    required this.numberOrder,
-    required this.document,
-    required this.sendReceived,
-    required this.status,
-  });
+DataRow recentFileDataRow(JsonSerializable data) {
+  var cells = data.toJson().entries.map((e) {
+    if (e.value is bool) {
+      return DataCell(
+          e.value ? const Icon(Icons.check) : const Icon(Icons.close));
+    } else {
+      return DataCell(Text('${e.value}'));
+    }
+  }).toList();
+  return DataRow(cells: cells);
 }

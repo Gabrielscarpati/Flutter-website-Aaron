@@ -9,16 +9,18 @@ class CustomerPage extends StatefulWidget {
 }
 
 class _CustomerPageState extends State<CustomerPage> {
-  List<DataTest>? filterData;
-  List<DataTest> dataList = [];
+  List<CustomerTest>? filterData;
+  List<CustomerTest> customerList = [];
   bool sort = true;
   final TextEditingController _searchController = TextEditingController();
+
+  List<WarningsTest> warningsTest = [];
 
   @override
   void initState() {
     super.initState();
-    dataList = _getData();
-    filterData = dataList;
+    customerList = _getData();
+    filterData = customerList;
   }
 
   @override
@@ -43,151 +45,215 @@ class _CustomerPageState extends State<CustomerPage> {
         ],
       )),
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(15.0),
-          decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              TextField(
-                controller: _searchController,
-                onChanged: (value) {
-                  setState(() {
-                    dataList = filterData!
-                        .where((element) => element.name.contains(value))
-                        .toList();
-                  });
-                },
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColors.secondaryColor.withOpacity(0.3),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                padding: const EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          customerList = filterData!
+                              .where((element) => element.name.contains(value))
+                              .toList();
+                        });
+                      },
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppColors.secondaryColor.withOpacity(0.3),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintText: "Search for a Name",
+                          prefixIcon: const Icon(Icons.search),
+                          prefixIconColor: Colors.black,
+                          suffixIcon: IconButton(
+                              icon:
+                                  const Icon(Icons.close, color: Colors.black),
+                              onPressed: () async {
+                                _searchController.clear();
+                                setState(() {
+                                  customerList = filterData!
+                                      .where((element) =>
+                                          element.name.contains(""))
+                                      .toList();
+                                });
+                              })),
                     ),
-                    hintText: "Search for a Name",
-                    prefixIcon: const Icon(Icons.search),
-                    prefixIconColor: Colors.black,
-                    suffixIcon: IconButton(
-                        icon: const Icon(Icons.close, color: Colors.black),
-                        onPressed: () async {
-                          _searchController.clear();
-                          setState(() {
-                            dataList = filterData!
-                                .where((element) => element.name.contains(""))
-                                .toList();
-                          });
-                        })),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Theme(
+                          data: ThemeData.light().copyWith(
+                              cardColor: Theme.of(context).canvasColor),
+                          child: PaginatedDataTable(
+                            sortColumnIndex: 0,
+                            sortAscending: sort,
+                            source: RowSource<CustomerTest>(
+                                dataList: customerList,
+                                count: customerList.length),
+                            rowsPerPage:
+                                customerList.isEmpty ? 1 : customerList.length,
+                            columnSpacing: 8,
+                            columns: const [
+                              DataColumn(
+                                label: Text(
+                                  'ID',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              ),
+                              DataColumn(
+                                  label: Text(
+                                'Name',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                'Phone',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                'city',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              DataColumn(
+                                  label: Center(
+                                child: Text(
+                                  'State',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              )),
+                              DataColumn(
+                                  label: Center(
+                                child: Text(
+                                  'Zip Code',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              )),
+                              DataColumn(
+                                  label: Center(
+                                child: Text(
+                                  'Current',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              )),
+                            ],
+                          )),
+                    )
+                  ],
+                ),
               ),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: Theme(
-                    data: ThemeData.light()
-                        .copyWith(cardColor: Theme.of(context).canvasColor),
-                    child: PaginatedDataTable(
-                      sortColumnIndex: 0,
-                      sortAscending: sort,
-                      source:
-                          RowSource(dataList: dataList, count: dataList.length),
-                      rowsPerPage: dataList.isEmpty ? 1 : dataList.length,
-                      columnSpacing: 8,
-                      columns: const [
-                        DataColumn(
-                          label: Text(
-                            'ID',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
-                          ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: const EdgeInsets.all(30.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(15.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).canvasColor,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: const Text(
+                        'WARNINGS',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                        DataColumn(
-                            label: Text(
-                          'Name',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Phone',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'city',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14),
-                        )),
-                        DataColumn(
-                            label: Center(
-                          child: Text(
-                            'State',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
-                          ),
-                        )),
-                        DataColumn(
-                            label: Center(
-                          child: Text(
-                            'Zip Code',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
-                          ),
-                        )),
-                        DataColumn(
-                            label: Center(
-                          child: Text(
-                            'Current',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
-                          ),
-                        )),
-                      ],
-                    )),
-              )
-            ],
-          ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Theme(
+                          data: ThemeData.light().copyWith(
+                              cardColor: Theme.of(context).canvasColor),
+                          child: PaginatedDataTable(
+                            sortColumnIndex: 0,
+                            sortAscending: sort,
+                            source: RowSource<WarningsTest>(
+                                dataList: warningsTest,
+                                count: warningsTest.length),
+                            rowsPerPage:
+                                warningsTest.isEmpty ? 1 : warningsTest.length,
+                            columnSpacing: 8,
+                            columns: const [
+                              DataColumn(
+                                label: Text(
+                                  'Date',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              ),
+                              DataColumn(
+                                  label: Text(
+                                'Customer',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                'ID',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                'Description',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                            ],
+                          )),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
-  // _updatedList(String value) async {
-  //   List<DataTest> mainList = _getData();
-  //   _dataList = mainList
-  //     .where((element) =>
-  //       element.name.toLowerCase().contains(value.toLowerCase()))
-  //       .toList();
-  // }
-
-  // _createSubtitle(String field, String attribute) {
-  //   return RichText(
-  //     text: TextSpan(
-  //       children: [
-  //         TextSpan(
-  //           text: field,
-  //           style: const TextStyle(
-  //               fontWeight: FontWeight.bold,
-  //               fontSize: 14,
-  //               color: AppColors.blackColor),
-  //         ),
-  //         TextSpan(
-  //           text: attribute,
-  //           style: const TextStyle(fontSize: 14, color: AppColors.blackColor),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  List<DataTest> _getData() {
+  List<CustomerTest> _getData() {
     return [
-      DataTest(
+      CustomerTest(
           name: 'Aaron',
           id: '1',
           phone: '123456789',
@@ -195,7 +261,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'SP',
           zip: 123456,
           current: true),
-      DataTest(
+      CustomerTest(
           name: 'John',
           id: '2',
           phone: '987654321',
@@ -203,7 +269,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'RJ',
           zip: 654321,
           current: false),
-      DataTest(
+      CustomerTest(
           name: 'Mary',
           id: '3',
           phone: '123456789',
@@ -211,7 +277,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'SP',
           zip: 123456,
           current: true),
-      DataTest(
+      CustomerTest(
           name: 'Jane',
           id: '4',
           phone: '987654321',
@@ -219,7 +285,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'RJ',
           zip: 654321,
           current: false),
-      DataTest(
+      CustomerTest(
           name: 'Aaron',
           id: '1',
           phone: '123456789',
@@ -227,7 +293,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'SP',
           zip: 123456,
           current: true),
-      DataTest(
+      CustomerTest(
           name: 'John',
           id: '2',
           phone: '987654321',
@@ -235,7 +301,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'RJ',
           zip: 654321,
           current: false),
-      DataTest(
+      CustomerTest(
           name: 'Mary',
           id: '3',
           phone: '123456789',
@@ -243,7 +309,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'SP',
           zip: 123456,
           current: true),
-      DataTest(
+      CustomerTest(
           name: 'Jane',
           id: '4',
           phone: '987654321',
@@ -251,7 +317,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'RJ',
           zip: 654321,
           current: false),
-      DataTest(
+      CustomerTest(
           name: 'Aaron',
           id: '1',
           phone: '123456789',
@@ -263,7 +329,7 @@ class _CustomerPageState extends State<CustomerPage> {
   }
 }
 
-class DataTest {
+class CustomerTest implements JsonSerializable {
   final String name;
   final String id;
   final String phone;
@@ -272,7 +338,7 @@ class DataTest {
   final int zip;
   final bool current;
 
-  DataTest(
+  CustomerTest(
       {required this.name,
       required this.id,
       required this.phone,
@@ -280,11 +346,51 @@ class DataTest {
       required this.state,
       required this.zip,
       required this.current});
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'id': id,
+      'phone': phone,
+      'city': city,
+      'state': state,
+      'zip': zip,
+      'current': current,
+    };
+  }
 }
 
-class RowSource extends DataTableSource {
-  var dataList;
-  final count;
+class WarningsTest extends JsonSerializable {
+  final String date;
+  final String customer;
+  final String id;
+  final String description;
+
+  WarningsTest(
+      {required this.date,
+      required this.customer,
+      required this.id,
+      required this.description});
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date,
+      'customer': customer,
+      'id': id,
+      'description': description,
+    };
+  }
+}
+
+abstract class JsonSerializable {
+  Map<String, dynamic> toJson();
+}
+
+class RowSource<T extends JsonSerializable> extends DataTableSource {
+  final List<T> dataList;
+  final int count;
   RowSource({
     required this.dataList,
     required this.count,
@@ -309,18 +415,15 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(var data) {
-  DataCell dataCell = (data.current)
-      ? const DataCell(Icon(Icons.check))
-      : const DataCell(Icon(Icons.close));
+DataRow recentFileDataRow(JsonSerializable data) {
+  var cells = data.toJson().entries.map((e) {
+    if (e.value is bool) {
+      return DataCell(
+          e.value ? const Icon(Icons.check) : const Icon(Icons.close));
+    } else {
+      return DataCell(Text('${e.value}'));
+    }
+  }).toList();
 
-  return DataRow(cells: [
-    DataCell(Text(data.id)),
-    DataCell(Text(data.name)),
-    DataCell(Text(data.phone)),
-    DataCell(Text(data.city)),
-    DataCell(Text(data.state)),
-    DataCell(Text(data.zip.toString())),
-    dataCell
-  ]);
+  return DataRow(cells: cells);
 }

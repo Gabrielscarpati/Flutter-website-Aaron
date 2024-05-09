@@ -54,13 +54,6 @@ class _IndexPageState extends State<IndexPage> {
       body: Row(
         children: [
           SideNavigationBar(
-            header: const SideNavigationBarHeader(
-              image: CircleAvatar(
-                child: Icon(Icons.account_balance),
-              ),
-              title: Text('Title widget'),
-              subtitle: Text('Subtitle widget', style: TextStyle(fontSize: 12)),
-            ),
             selectedIndex: _selectedIndex,
             items: const [
               SideNavigationBarItem(

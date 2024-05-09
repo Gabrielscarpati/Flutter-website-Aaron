@@ -219,7 +219,7 @@ class DataTest {
       required this.removed});
 
   @override
-  toString() {
+  String toString() {
     return 'DataTest(seller: $seller, contactName: $contactName, phone: $phone, state: $state, tradingPartners: $tradingPartners, removed: $removed)';
   }
 }
