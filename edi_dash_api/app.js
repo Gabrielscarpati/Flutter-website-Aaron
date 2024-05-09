@@ -47,9 +47,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/', async (_, res) => {
+app.get('/edi_members', async (_, res) => {
     try {
-        connection.query('select * from admin', function (error, results, _fields) {
+        connection.query('select * from seller', function (error, results, _fields) {
             if (error) {
                 res.json({
                     error
@@ -65,9 +65,50 @@ app.get('/', async (_, res) => {
     }
 });
 
-app.get('/sellers', async (_, res) => {
+app.get('/edi_customers', async (_, res) => {
     try {
-        connection.query('select * from seller', function (error, results, _fields) {
+        connection.query('select * from buyer', function (error, results, _fields) {
+            if (error) {
+                res.json({
+                    error
+                });
+            } else {
+                res.json(results);
+            }
+        });
+    } catch (error) {
+        res.json({
+            error
+        });
+    }
+});
+
+app.get('/american_flooring', async (_, res) => {
+    try {
+        connection.query(`
+        select queue.parent_id, queue.task, q2.id, queue.start, q2.end 
+        from queue inner join queue q2 on queue.parent_id = q2.id
+        where queue.ukey = 60 and queue.start is not null
+        order by queue.start asc`,
+            function (error, results, _fields) {
+                if (error) {
+                    res.json({
+                        error
+                    });
+                } else {
+                    res.json(results);
+                }
+            });
+    } catch (error) {
+        res.json({
+            error
+        });
+    }
+});
+
+app.get('/warnings', async (_, res) => {
+    try {
+        connection.query('select * from log where category = "Error"', function (error, results, _fields) {
             if (error) {
                 res.json({
                     error

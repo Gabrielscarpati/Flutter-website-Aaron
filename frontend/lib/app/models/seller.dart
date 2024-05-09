@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter_website_aaron/app/framework/imodel.dart';
 
 class Seller implements IModel {
@@ -6,7 +7,7 @@ class Seller implements IModel {
   final String phone;
   final String state;
   final String tradingPartners;
-  final int removed;
+  final String removed;
 
   Seller(
       {required this.seller,
@@ -26,5 +27,16 @@ class Seller implements IModel {
       'tradingPartners': tradingPartners,
       'removed': removed,
     };
+  }
+
+  factory Seller.fromJson(Map<String, dynamic> json) {
+    return Seller(
+      seller: json['name'] ?? '',
+      contactName: json['name'] ?? '',
+      phone: json['phone'] ?? '',
+      removed: json['phone'] ?? '',
+      state: json['state'] ?? '',
+      tradingPartners: json['phone'] ?? '',
+    );
   }
 }

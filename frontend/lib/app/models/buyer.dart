@@ -1,13 +1,13 @@
 import 'package:flutter_website_aaron/app/framework/imodel.dart';
 
 class Buyer implements IModel {
+  final int id;
   final String name;
-  final String id;
   final String phone;
   final String city;
   final String state;
-  final int zip;
-  final bool current;
+  final String zip;
+  final int current;
 
   Buyer(
       {required this.name,
@@ -21,13 +21,25 @@ class Buyer implements IModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
       'id': id,
+      'name': name,
       'phone': phone,
       'city': city,
       'state': state,
       'zip': zip,
       'current': current,
     };
+  }
+
+  factory Buyer.fromJson(Map<String, dynamic> json) {
+    return Buyer(
+      city: json['city'] ?? '',
+      current: json['active'] ?? '',
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      phone: json['phone'] ?? '',
+      state: json['state'] ?? '',
+      zip: json['zip'] ?? '',
+    );
   }
 }

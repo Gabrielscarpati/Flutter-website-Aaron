@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/seller.dart';
+import 'package:flutter_website_aaron/app/pages/tabs/tabs_controllers/member_page_controller.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
 class MemberPage extends StatefulWidget {
@@ -11,43 +12,9 @@ class MemberPage extends StatefulWidget {
 }
 
 class _MemberPageState extends State<MemberPage> {
-  List<Seller> dataList = [
-    Seller(
-        seller: 'Seller 1',
-        contactName: 'Contact Name 1',
-        phone: 'Phone 1',
-        state: 'State 1',
-        tradingPartners: 'Trading Partners 1',
-        removed: 0),
-    Seller(
-        seller: 'Seller 2',
-        contactName: 'Contact Name 2',
-        phone: 'Phone 2',
-        state: 'State 2',
-        tradingPartners: 'Trading Partners 2',
-        removed: 0),
-    Seller(
-        seller: 'Seller 3',
-        contactName: 'Contact Name 3',
-        phone: 'Phone 3',
-        state: 'State 3',
-        tradingPartners: 'Trading Partners 3',
-        removed: 0),
-    Seller(
-        seller: 'Seller 4',
-        contactName: 'Contact Name 4',
-        phone: 'Phone 4',
-        state: 'State 4',
-        tradingPartners: 'Trading Partners 4',
-        removed: 0),
-    Seller(
-        seller: 'Seller 5',
-        contactName: 'Contact Name 5',
-        phone: 'Phone 5',
-        state: 'State 5',
-        tradingPartners: 'Trading Partners 5',
-        removed: 0),
-  ];
+  final _controller = MemberPageController.instance;
+
+  List<Seller> dataList = List.empty(growable: true);
 
   bool sort = true;
   List<Seller>? filterData;
@@ -66,6 +33,12 @@ class _MemberPageState extends State<MemberPage> {
 
   @override
   void initState() {
+    _controller.getSellers().then((value) {
+      setState(() {
+        dataList = value;
+      });
+    });
+
     filterData = dataList;
     super.initState();
   }
@@ -142,8 +115,8 @@ class _MemberPageState extends State<MemberPage> {
                     child: PaginatedDataTable(
                       sortColumnIndex: 0,
                       sortAscending: sort,
-                      source:
-                          RowSource<Seller>(dataList: dataList, count: dataList.length),
+                      source: RowSource<Seller>(
+                          dataList: dataList, count: dataList.length),
                       rowsPerPage: dataList.isEmpty ? 1 : dataList.length,
                       columnSpacing: 8,
                       columns: [

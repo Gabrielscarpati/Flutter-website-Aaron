@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_aaron/app/pages/tabs/florida_tile.dart';
-import 'package:flutter_website_aaron/app/pages/tabs/member.dart';
+import 'package:flutter_website_aaron/app/pages/tabs/florida_tile_page.dart';
+import 'package:flutter_website_aaron/app/pages/tabs/member_page.dart';
 import 'package:flutter_website_aaron/app/pages/tabs/transaction_history.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 import 'package:side_navigation/side_navigation.dart';
@@ -57,7 +57,9 @@ class _IndexPageState extends State<IndexPage> {
             selectedIndex: _selectedIndex,
             items: const [
               SideNavigationBarItem(
-                  icon: Icons.person, label: 'Members',),
+                icon: Icons.person,
+                label: 'Members',
+              ),
               SideNavigationBarItem(
                   icon: Icons.account_balance, label: 'Florida Tile'),
               SideNavigationBarItem(

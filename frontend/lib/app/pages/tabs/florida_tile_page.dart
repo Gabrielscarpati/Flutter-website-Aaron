@@ -4,6 +4,8 @@ import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/warning.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
+import 'tabs_controllers/florida_tile_page_controller.dart';
+
 class FloridaTilePage extends StatefulWidget {
   const FloridaTilePage({super.key});
 
@@ -12,18 +14,28 @@ class FloridaTilePage extends StatefulWidget {
 }
 
 class _FloridaTilePageState extends State<FloridaTilePage> {
-  List<Buyer>? filterData;
-  List<Buyer> customerList = [];
+  final _controller = FloridaTilePageController.instance;
+
+  List<Buyer> dataList = List.empty(growable: true);
+
   bool sort = true;
+  List<Buyer>? filterData;
+
   final TextEditingController _searchController = TextEditingController();
 
   List<Warning> warningsTest = [];
 
   @override
   void initState() {
+    _controller.getBuyers().then((value) {
+      setState(() {
+        dataList = value;
+      });
+    });
+
     super.initState();
-    customerList = _getData();
-    filterData = customerList;
+    dataList = _getData();
+    filterData = dataList;
   }
 
   @override
@@ -67,7 +79,7 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                       controller: _searchController,
                       onChanged: (value) {
                         setState(() {
-                          customerList = filterData!
+                          dataList = filterData!
                               .where((element) => element.name.contains(value))
                               .toList();
                         });
@@ -89,7 +101,7 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                               onPressed: () async {
                                 _searchController.clear();
                                 setState(() {
-                                  customerList = filterData!
+                                  dataList = filterData!
                                       .where((element) =>
                                           element.name.contains(""))
                                       .toList();
@@ -106,10 +118,8 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                             sortColumnIndex: 0,
                             sortAscending: sort,
                             source: RowSource<Buyer>(
-                                dataList: customerList,
-                                count: customerList.length),
-                            rowsPerPage:
-                                customerList.isEmpty ? 1 : customerList.length,
+                                dataList: dataList, count: dataList.length),
+                            rowsPerPage: dataList.isEmpty ? 1 : dataList.length,
                             columnSpacing: 8,
                             columns: const [
                               DataColumn(
@@ -255,79 +265,6 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
   }
 
   List<Buyer> _getData() {
-    return [
-      Buyer(
-          name: 'Aaron',
-          id: '1',
-          phone: '123456789',
-          city: 'São Paulo',
-          state: 'SP',
-          zip: 123456,
-          current: true),
-      Buyer(
-          name: 'John',
-          id: '2',
-          phone: '987654321',
-          city: 'Rio de Janeiro',
-          state: 'RJ',
-          zip: 654321,
-          current: false),
-      Buyer(
-          name: 'Mary',
-          id: '3',
-          phone: '123456789',
-          city: 'São Paulo',
-          state: 'SP',
-          zip: 123456,
-          current: true),
-      Buyer(
-          name: 'Jane',
-          id: '4',
-          phone: '987654321',
-          city: 'Rio de Janeiro',
-          state: 'RJ',
-          zip: 654321,
-          current: false),
-      Buyer(
-          name: 'Aaron',
-          id: '1',
-          phone: '123456789',
-          city: 'São Paulo',
-          state: 'SP',
-          zip: 123456,
-          current: true),
-      Buyer(
-          name: 'John',
-          id: '2',
-          phone: '987654321',
-          city: 'Rio de Janeiro',
-          state: 'RJ',
-          zip: 654321,
-          current: false),
-      Buyer(
-          name: 'Mary',
-          id: '3',
-          phone: '123456789',
-          city: 'São Paulo',
-          state: 'SP',
-          zip: 123456,
-          current: true),
-      Buyer(
-          name: 'Jane',
-          id: '4',
-          phone: '987654321',
-          city: 'Rio de Janeiro',
-          state: 'RJ',
-          zip: 654321,
-          current: false),
-      Buyer(
-          name: 'Aaron',
-          id: '1',
-          phone: '123456789',
-          city: 'São Paulo',
-          state: 'SP',
-          zip: 123456,
-          current: true),
-    ];
+    return dataList;
   }
 }
