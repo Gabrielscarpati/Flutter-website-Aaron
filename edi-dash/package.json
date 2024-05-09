@@ -1,0 +1,29 @@
+{
+  "name": "edi_dash",
+  "version": "1.0.0",
+  "description": "EDI - Dash",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "mysql": "^2.18.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0"
+  },
+  "gitignore": [
+    ".env",
+    "node_modules"
+  ],
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
