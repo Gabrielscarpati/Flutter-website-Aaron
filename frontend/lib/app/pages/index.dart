@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_aaron/app/pages/tabs/customer.dart';
+import 'package:flutter_website_aaron/app/pages/tabs/florida_tile.dart';
 import 'package:flutter_website_aaron/app/pages/tabs/member.dart';
 import 'package:flutter_website_aaron/app/pages/tabs/transaction_history.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
@@ -33,7 +33,7 @@ class _IndexPageState extends State<IndexPage> {
 
   final _widgetOptions = const <Widget>[
     MemberPage(),
-    CustomerPage(),
+    FloridaTilePage(),
     TransactionHistory(),
   ];
 

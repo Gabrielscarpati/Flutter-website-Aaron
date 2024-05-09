@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_aaron/app/framwork/imodel.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
+import 'package:flutter_website_aaron/app/models/log.dart';
+import 'package:flutter_website_aaron/app/models/order.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
 class TransactionHistory extends StatefulWidget {
@@ -11,41 +12,41 @@ class TransactionHistory extends StatefulWidget {
 }
 
 class _TransactionHistoryState extends State<TransactionHistory> {
-  List<OrderTest> orderList = [
-    OrderTest(
+  List<Order> orderList = [
+    Order(
         date: 'Date 1',
         numberOrder: 1,
         document: 1,
         sendReceived: 'Send Received 1',
         status: 'Status 1'),
-    OrderTest(
+    Order(
         date: 'Date 2',
         numberOrder: 2,
         document: 2,
         sendReceived: 'Send Received 2',
         status: 'Status 2'),
-    OrderTest(
+    Order(
         date: 'Date 3',
         numberOrder: 3,
         document: 3,
         sendReceived: 'Send Received 3',
         status: 'Status 3'),
-    OrderTest(
+    Order(
         date: 'Date 4',
         numberOrder: 4,
         document: 4,
         sendReceived: 'Send Received 4',
         status: 'Status 4'),
-    OrderTest(
+    Order(
         date: 'Date 5',
         numberOrder: 5,
         document: 5,
         sendReceived: 'Send Received 5',
         status: 'Status 5'),
   ];
-  List<ErrorTest> errorList = [];
+  List<Log> logList = [];
   bool sort = true;
-  List<OrderTest>? filterData;
+  List<Order>? filterData;
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -236,10 +237,10 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                           child: PaginatedDataTable(
                             sortColumnIndex: 0,
                             sortAscending: sort,
-                            source: RowSource<ErrorTest>(
-                                dataList: errorList, count: errorList.length),
+                            source: RowSource<Log>(
+                                dataList: logList, count: logList.length),
                             rowsPerPage:
-                                errorList.isEmpty ? 1 : errorList.length,
+                                logList.isEmpty ? 1 : logList.length,
                             columnSpacing: 8,
                             columns: const [
                               DataColumn(
@@ -253,12 +254,6 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                               DataColumn(
                                   label: Text(
                                 'Task Description',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'Document',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 14),
                               )),
@@ -288,56 +283,5 @@ class _TransactionHistoryState extends State<TransactionHistory> {
         ),
       ),
     );
-  }
-}
-
-class OrderTest implements IModel {
-  final String date;
-  final int numberOrder;
-  final int document;
-  final String sendReceived;
-  final String status;
-
-  OrderTest({
-    required this.date,
-    required this.numberOrder,
-    required this.document,
-    required this.sendReceived,
-    required this.status,
-  });
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'date': date,
-      'numberOrder': numberOrder,
-      'document': document,
-      'sendReceived': sendReceived,
-      'status': status,
-    };
-  }
-}
-
-class ErrorTest extends IModel {
-  final String date;
-  final String taskDescription;
-  final String id;
-  final String error;
-
-  ErrorTest({
-    required this.date,
-    required this.taskDescription,
-    required this.id,
-    required this.error,
-  });
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'date': date,
-      'taskDescription': taskDescription,
-      'id': id,
-      'error': error,
-    };
   }
 }

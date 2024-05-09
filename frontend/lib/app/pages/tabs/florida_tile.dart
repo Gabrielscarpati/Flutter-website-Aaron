@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_aaron/app/framwork/imodel.dart';
+import 'package:flutter_website_aaron/app/models/buyer.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
+import 'package:flutter_website_aaron/app/models/warning.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
-class CustomerPage extends StatefulWidget {
-  const CustomerPage({super.key});
+class FloridaTilePage extends StatefulWidget {
+  const FloridaTilePage({super.key});
 
   @override
-  State<CustomerPage> createState() => _CustomerPageState();
+  State<FloridaTilePage> createState() => _FloridaTilePageState();
 }
 
-class _CustomerPageState extends State<CustomerPage> {
-  List<CustomerTest>? filterData;
-  List<CustomerTest> customerList = [];
+class _FloridaTilePageState extends State<FloridaTilePage> {
+  List<Buyer>? filterData;
+  List<Buyer> customerList = [];
   bool sort = true;
   final TextEditingController _searchController = TextEditingController();
 
-  List<WarningsTest> warningsTest = [];
+  List<Warning> warningsTest = [];
 
   @override
   void initState() {
@@ -104,7 +105,7 @@ class _CustomerPageState extends State<CustomerPage> {
                           child: PaginatedDataTable(
                             sortColumnIndex: 0,
                             sortAscending: sort,
-                            source: RowSource<CustomerTest>(
+                            source: RowSource<Buyer>(
                                 dataList: customerList,
                                 count: customerList.length),
                             rowsPerPage:
@@ -207,7 +208,7 @@ class _CustomerPageState extends State<CustomerPage> {
                           child: PaginatedDataTable(
                             sortColumnIndex: 0,
                             sortAscending: sort,
-                            source: RowSource<WarningsTest>(
+                            source: RowSource<Warning>(
                                 dataList: warningsTest,
                                 count: warningsTest.length),
                             rowsPerPage:
@@ -253,9 +254,9 @@ class _CustomerPageState extends State<CustomerPage> {
     );
   }
 
-  List<CustomerTest> _getData() {
+  List<Buyer> _getData() {
     return [
-      CustomerTest(
+      Buyer(
           name: 'Aaron',
           id: '1',
           phone: '123456789',
@@ -263,7 +264,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'SP',
           zip: 123456,
           current: true),
-      CustomerTest(
+      Buyer(
           name: 'John',
           id: '2',
           phone: '987654321',
@@ -271,7 +272,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'RJ',
           zip: 654321,
           current: false),
-      CustomerTest(
+      Buyer(
           name: 'Mary',
           id: '3',
           phone: '123456789',
@@ -279,7 +280,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'SP',
           zip: 123456,
           current: true),
-      CustomerTest(
+      Buyer(
           name: 'Jane',
           id: '4',
           phone: '987654321',
@@ -287,7 +288,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'RJ',
           zip: 654321,
           current: false),
-      CustomerTest(
+      Buyer(
           name: 'Aaron',
           id: '1',
           phone: '123456789',
@@ -295,7 +296,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'SP',
           zip: 123456,
           current: true),
-      CustomerTest(
+      Buyer(
           name: 'John',
           id: '2',
           phone: '987654321',
@@ -303,7 +304,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'RJ',
           zip: 654321,
           current: false),
-      CustomerTest(
+      Buyer(
           name: 'Mary',
           id: '3',
           phone: '123456789',
@@ -311,7 +312,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'SP',
           zip: 123456,
           current: true),
-      CustomerTest(
+      Buyer(
           name: 'Jane',
           id: '4',
           phone: '987654321',
@@ -319,7 +320,7 @@ class _CustomerPageState extends State<CustomerPage> {
           state: 'RJ',
           zip: 654321,
           current: false),
-      CustomerTest(
+      Buyer(
           name: 'Aaron',
           id: '1',
           phone: '123456789',
@@ -328,60 +329,5 @@ class _CustomerPageState extends State<CustomerPage> {
           zip: 123456,
           current: true),
     ];
-  }
-}
-
-class CustomerTest implements IModel {
-  final String name;
-  final String id;
-  final String phone;
-  final String city;
-  final String state;
-  final int zip;
-  final bool current;
-
-  CustomerTest(
-      {required this.name,
-      required this.id,
-      required this.phone,
-      required this.city,
-      required this.state,
-      required this.zip,
-      required this.current});
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'id': id,
-      'phone': phone,
-      'city': city,
-      'state': state,
-      'zip': zip,
-      'current': current,
-    };
-  }
-}
-
-class WarningsTest extends IModel {
-  final String date;
-  final String customer;
-  final String id;
-  final String description;
-
-  WarningsTest(
-      {required this.date,
-      required this.customer,
-      required this.id,
-      required this.description});
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'date': date,
-      'customer': customer,
-      'id': id,
-      'description': description,
-    };
   }
 }
