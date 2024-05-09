@@ -1,4 +1,4 @@
-import 'package:flutter_website_aaron/app/framwork/imodel.dart';
+import 'package:flutter_website_aaron/app/framework/imodel.dart';
 
 class Log extends IModel {
   final String date;

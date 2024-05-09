@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_aaron/app/framwork/imodel.dart';
+import 'package:flutter_website_aaron/app/framework/imodel.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/data_row.dart';
 
 class RowSource<T extends IModel> extends DataTableSource {
