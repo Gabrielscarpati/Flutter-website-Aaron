@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_website_aaron/app/framwork/imodel.dart';
+import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
 class CustomerPage extends StatefulWidget {
@@ -329,7 +331,7 @@ class _CustomerPageState extends State<CustomerPage> {
   }
 }
 
-class CustomerTest implements JsonSerializable {
+class CustomerTest implements IModel {
   final String name;
   final String id;
   final String phone;
@@ -361,7 +363,7 @@ class CustomerTest implements JsonSerializable {
   }
 }
 
-class WarningsTest extends JsonSerializable {
+class WarningsTest extends IModel {
   final String date;
   final String customer;
   final String id;
@@ -382,48 +384,4 @@ class WarningsTest extends JsonSerializable {
       'description': description,
     };
   }
-}
-
-abstract class JsonSerializable {
-  Map<String, dynamic> toJson();
-}
-
-class RowSource<T extends JsonSerializable> extends DataTableSource {
-  final List<T> dataList;
-  final int count;
-  RowSource({
-    required this.dataList,
-    required this.count,
-  });
-
-  @override
-  DataRow? getRow(int index) {
-    if (index < rowCount) {
-      return recentFileDataRow(dataList[index]);
-    } else {
-      return null;
-    }
-  }
-
-  @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get rowCount => count;
-
-  @override
-  int get selectedRowCount => 0;
-}
-
-DataRow recentFileDataRow(JsonSerializable data) {
-  var cells = data.toJson().entries.map((e) {
-    if (e.value is bool) {
-      return DataCell(
-          e.value ? const Icon(Icons.check) : const Icon(Icons.close));
-    } else {
-      return DataCell(Text('${e.value}'));
-    }
-  }).toList();
-
-  return DataRow(cells: cells);
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_website_aaron/app/framwork/imodel.dart';
+import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
 class MemberPage extends StatefulWidget {
@@ -141,7 +143,7 @@ class _MemberPageState extends State<MemberPage> {
                       sortColumnIndex: 0,
                       sortAscending: sort,
                       source:
-                          RowSource(dataList: dataList, count: dataList.length),
+                          RowSource<DataTest>(dataList: dataList, count: dataList.length),
                       rowsPerPage: dataList.isEmpty ? 1 : dataList.length,
                       columnSpacing: 8,
                       columns: [
@@ -202,7 +204,7 @@ class _MemberPageState extends State<MemberPage> {
   }
 }
 
-class DataTest {
+class DataTest implements IModel {
   final String seller;
   final String contactName;
   final String phone;
@@ -219,45 +221,14 @@ class DataTest {
       required this.removed});
 
   @override
-  String toString() {
-    return 'DataTest(seller: $seller, contactName: $contactName, phone: $phone, state: $state, tradingPartners: $tradingPartners, removed: $removed)';
+  Map<String, dynamic> toJson() {
+    return {
+      'seller': seller,
+      'contactName': contactName,
+      'phone': phone,
+      'state': state,
+      'tradingPartners': tradingPartners,
+      'removed': removed,
+    };
   }
-}
-
-class RowSource extends DataTableSource {
-  var dataList;
-  final count;
-  RowSource({
-    required this.dataList,
-    required this.count,
-  });
-
-  @override
-  DataRow? getRow(int index) {
-    if (index < rowCount) {
-      return recentFileDataRow(dataList[index]);
-    } else {
-      return null;
-    }
-  }
-
-  @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get rowCount => count;
-
-  @override
-  int get selectedRowCount => 0;
-}
-
-DataRow recentFileDataRow(var data) {
-  return DataRow(cells: [
-    DataCell(Text(data.seller)),
-    DataCell(Text(data.contactName)),
-    DataCell(Text(data.phone)),
-    DataCell(Text(data.state)),
-    DataCell(Text(data.tradingPartners)),
-    DataCell(Text(data.removed.toString())),
-  ]);
 }
