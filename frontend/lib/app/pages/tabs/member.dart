@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_aaron/app/framwork/imodel.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
+import 'package:flutter_website_aaron/app/models/seller.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
 class MemberPage extends StatefulWidget {
@@ -11,36 +11,36 @@ class MemberPage extends StatefulWidget {
 }
 
 class _MemberPageState extends State<MemberPage> {
-  List<DataTest> dataList = [
-    DataTest(
+  List<Seller> dataList = [
+    Seller(
         seller: 'Seller 1',
         contactName: 'Contact Name 1',
         phone: 'Phone 1',
         state: 'State 1',
         tradingPartners: 'Trading Partners 1',
         removed: 0),
-    DataTest(
+    Seller(
         seller: 'Seller 2',
         contactName: 'Contact Name 2',
         phone: 'Phone 2',
         state: 'State 2',
         tradingPartners: 'Trading Partners 2',
         removed: 0),
-    DataTest(
+    Seller(
         seller: 'Seller 3',
         contactName: 'Contact Name 3',
         phone: 'Phone 3',
         state: 'State 3',
         tradingPartners: 'Trading Partners 3',
         removed: 0),
-    DataTest(
+    Seller(
         seller: 'Seller 4',
         contactName: 'Contact Name 4',
         phone: 'Phone 4',
         state: 'State 4',
         tradingPartners: 'Trading Partners 4',
         removed: 0),
-    DataTest(
+    Seller(
         seller: 'Seller 5',
         contactName: 'Contact Name 5',
         phone: 'Phone 5',
@@ -50,7 +50,7 @@ class _MemberPageState extends State<MemberPage> {
   ];
 
   bool sort = true;
-  List<DataTest>? filterData;
+  List<Seller>? filterData;
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -143,7 +143,7 @@ class _MemberPageState extends State<MemberPage> {
                       sortColumnIndex: 0,
                       sortAscending: sort,
                       source:
-                          RowSource<DataTest>(dataList: dataList, count: dataList.length),
+                          RowSource<Seller>(dataList: dataList, count: dataList.length),
                       rowsPerPage: dataList.isEmpty ? 1 : dataList.length,
                       columnSpacing: 8,
                       columns: [
@@ -201,34 +201,5 @@ class _MemberPageState extends State<MemberPage> {
         ),
       ),
     );
-  }
-}
-
-class DataTest implements IModel {
-  final String seller;
-  final String contactName;
-  final String phone;
-  final String state;
-  final String tradingPartners;
-  final int removed;
-
-  DataTest(
-      {required this.seller,
-      required this.contactName,
-      required this.phone,
-      required this.state,
-      required this.tradingPartners,
-      required this.removed});
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'seller': seller,
-      'contactName': contactName,
-      'phone': phone,
-      'state': state,
-      'tradingPartners': tradingPartners,
-      'removed': removed,
-    };
   }
 }
