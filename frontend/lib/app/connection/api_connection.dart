@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_website_aaron/app/connection/error_interceptor.dart';
 
 import 'auth_interceptor.dart';
 
@@ -16,6 +17,7 @@ class ApiConnection {
   ApiConnection._() {
     _dio = Dio();
     _dio.interceptors.add(AuthInterceptor());
+    _dio.interceptors.add(ErrorInterceptor(dio: _dio));
   }
 
   Future<Map<String, dynamic>> get({

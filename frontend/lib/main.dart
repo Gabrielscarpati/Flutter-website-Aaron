@@ -5,6 +5,8 @@ import 'package:flutter_website_aaron/app/shared/storage.dart';
 
 import 'app/pages/home_page.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() {
   runApp(const EDIDashApp());
 }
@@ -14,6 +16,7 @@ class EDIDashApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'EDI Dash',
       theme: ThemeData(
