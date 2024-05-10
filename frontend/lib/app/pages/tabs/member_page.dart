@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_website_aaron/app/components/loading_component.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/seller.dart';
 import 'package:flutter_website_aaron/app/pages/tabs/tabs_controllers/member_page_controller.dart';
@@ -18,6 +19,7 @@ class _MemberPageState extends State<MemberPage> {
 
   bool sort = true;
   List<Seller>? filterData;
+  bool _isLoading = true;
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -35,7 +37,7 @@ class _MemberPageState extends State<MemberPage> {
 
   @override
   void initState() {
-    _getSelers();
+    _getSellers();
     super.initState();
   }
 
@@ -60,129 +62,136 @@ class _MemberPageState extends State<MemberPage> {
           )
         ],
       )),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(15.0),
-          decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              TextField(
-                controller: _searchController,
-                onChanged: (value) {
-                  setState(() {
-                    dataList = filterData!
-                        .where((element) => element.seller
-                            .toLowerCase()
-                            .contains(value.toLowerCase()))
-                        .toList();
-                    key.currentState!.pageTo(0);
-                  });
-                },
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColors.secondaryColor.withOpacity(0.3),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
+      body: _isLoading
+          ? const LoadingComponent()
+          : SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          dataList = filterData!
+                              .where((element) => element.seller
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                              .toList();
+                          key.currentState!.pageTo(0);
+                        });
+                      },
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppColors.secondaryColor.withOpacity(0.3),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintText: "Search for a Seller",
+                          prefixIcon: const Icon(Icons.search),
+                          prefixIconColor: Colors.black,
+                          suffixIcon: IconButton(
+                              icon:
+                                  const Icon(Icons.close, color: Colors.black),
+                              onPressed: () async {
+                                _searchController.clear();
+                                setState(() {
+                                  _getSellers();
+                                });
+                              })),
                     ),
-                    hintText: "Search for a Seller",
-                    prefixIcon: const Icon(Icons.search),
-                    prefixIconColor: Colors.black,
-                    suffixIcon: IconButton(
-                        icon: const Icon(Icons.close, color: Colors.black),
-                        onPressed: () async {
-                          _searchController.clear();
-                          setState(() {
-                            _getSelers();
-                          });
-                        })),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Theme(
+                          data: ThemeData.light().copyWith(
+                              cardColor: Theme.of(context).canvasColor),
+                          child: PaginatedDataTable(
+                            key: key,
+                            sortColumnIndex: 0,
+                            sortAscending: sort,
+                            source: RowSource<Seller>(
+                                dataList: dataList, count: dataList.length),
+                            rowsPerPage: dataList.length > 10
+                                ? 10
+                                : dataList.isEmpty
+                                    ? 1
+                                    : dataList.length,
+                            columnSpacing: 8,
+                            columns: [
+                              DataColumn(
+                                  label: const Text(
+                                    'Seller',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14),
+                                  ),
+                                  onSort: ((columnIndex, ascending) {
+                                    setState(() {
+                                      sort = !sort;
+                                      sortColumn(columnIndex, ascending);
+                                    });
+                                  })),
+                              const DataColumn(
+                                  label: Text(
+                                'Contact Name',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              const DataColumn(
+                                  label: Text(
+                                'Phone',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              const DataColumn(
+                                  label: Text(
+                                'State',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )),
+                              const DataColumn(
+                                  label: Center(
+                                child: Text(
+                                  'Trading Partners',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              )),
+                              const DataColumn(
+                                  label: Center(
+                                child: Text(
+                                  'Removed',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              )),
+                            ],
+                          )),
+                    )
+                  ],
+                ),
               ),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: Theme(
-                    data: ThemeData.light()
-                        .copyWith(cardColor: Theme.of(context).canvasColor),
-                    child: PaginatedDataTable(
-                      key: key,
-                      sortColumnIndex: 0,
-                      sortAscending: sort,
-                      source: RowSource<Seller>(
-                          dataList: dataList, count: dataList.length),
-                      rowsPerPage: dataList.length > 10
-                          ? 10
-                          : dataList.isEmpty
-                              ? 1
-                              : dataList.length,
-                      columnSpacing: 8,
-                      columns: [
-                        DataColumn(
-                            label: const Text(
-                              'Seller',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 14),
-                            ),
-                            onSort: ((columnIndex, ascending) {
-                              setState(() {
-                                sort = !sort;
-                                sortColumn(columnIndex, ascending);
-                              });
-                            })),
-                        const DataColumn(
-                            label: Text(
-                          'Contact Name',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14),
-                        )),
-                        const DataColumn(
-                            label: Text(
-                          'Phone',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14),
-                        )),
-                        const DataColumn(
-                            label: Text(
-                          'State',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14),
-                        )),
-                        const DataColumn(
-                            label: Center(
-                          child: Text(
-                            'Trading Partners',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
-                          ),
-                        )),
-                        const DataColumn(
-                            label: Center(
-                          child: Text(
-                            'Removed',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
-                          ),
-                        )),
-                      ],
-                    )),
-              )
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
-  _getSelers() {
+  _getSellers() {
     _controller.getSellers().then((value) {
       setState(() {
         dataList = value;
         filterData = value;
+        _isLoading = false;
       });
     });
   }

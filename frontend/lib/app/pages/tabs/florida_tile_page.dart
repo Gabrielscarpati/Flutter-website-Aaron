@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_website_aaron/app/components/loading_component.dart';
 import 'package:flutter_website_aaron/app/models/buyer.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/warning.dart';
@@ -24,7 +25,7 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
 
   List<Warning> warnings = List.empty(growable: true);
 
-  bool isLoading = true;
+  bool _isLoading = true;
 
   final key = GlobalKey<PaginatedDataTableState>();
 
@@ -33,7 +34,7 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
       setState(() {
         dataList = value;
         filterData = dataList;
-        isLoading = false;
+        _isLoading = false;
       });
     });
   }
@@ -74,10 +75,10 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
           )
         ],
       )),
-      body: SingleChildScrollView(
-        child: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Row(
+      body: _isLoading
+          ? const LoadingComponent()
+          : SingleChildScrollView(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
@@ -139,7 +140,8 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                                   sortColumnIndex: 0,
                                   sortAscending: sort,
                                   source: RowSource<Buyer>(
-                                      dataList: dataList, count: dataList.length),
+                                      dataList: dataList,
+                                      count: dataList.length),
                                   rowsPerPage: dataList.length > 10
                                       ? 10
                                       : dataList.isEmpty
@@ -295,7 +297,7 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                   )
                 ],
               ),
-      ),
+            ),
     );
   }
 }
