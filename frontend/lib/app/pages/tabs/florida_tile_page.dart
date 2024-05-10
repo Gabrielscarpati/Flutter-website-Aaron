@@ -20,22 +20,24 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
 
   bool sort = true;
   List<Buyer>? filterData;
-
   final TextEditingController _searchController = TextEditingController();
-
   List<Warning> warningsTest = [];
+  bool isLoading = true;
 
-  @override
-  void initState() {
+  _getBuyers() {
     _controller.getBuyers().then((value) {
       setState(() {
         dataList = value;
+        filterData = dataList;
+        isLoading = false;
       });
     });
+  }
 
+  @override
+  void initState() {
+    _getBuyers();
     super.initState();
-    dataList = _getData();
-    filterData = dataList;
   }
 
   @override
@@ -60,211 +62,220 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
         ],
       )),
       body: SingleChildScrollView(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Container(
-                padding: const EdgeInsets.all(15.0),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).canvasColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: _searchController,
-                      onChanged: (value) {
-                        setState(() {
-                          dataList = filterData!
-                              .where((element) => element.name.contains(value))
-                              .toList();
-                        });
-                      },
-                      style: const TextStyle(color: Colors.black),
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColors.secondaryColor.withOpacity(0.3),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          hintText: "Search for a Name",
-                          prefixIcon: const Icon(Icons.search),
-                          prefixIconColor: Colors.black,
-                          suffixIcon: IconButton(
-                              icon:
-                                  const Icon(Icons.close, color: Colors.black),
-                              onPressed: () async {
-                                _searchController.clear();
-                                setState(() {
-                                  dataList = filterData!
-                                      .where((element) =>
-                                          element.name.contains(""))
-                                      .toList();
-                                });
-                              })),
-                    ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Theme(
-                          data: ThemeData.light().copyWith(
-                              cardColor: Theme.of(context).canvasColor),
-                          child: PaginatedDataTable(
-                            sortColumnIndex: 0,
-                            sortAscending: sort,
-                            source: RowSource<Buyer>(
-                                dataList: dataList, count: dataList.length),
-                            rowsPerPage: dataList.isEmpty ? 1 : dataList.length,
-                            columnSpacing: 8,
-                            columns: const [
-                              DataColumn(
-                                label: Text(
-                                  'ID',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14),
-                                ),
-                              ),
-                              DataColumn(
-                                  label: Text(
-                                'Name',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'Phone',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'city',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              )),
-                              DataColumn(
-                                  label: Center(
-                                child: Text(
-                                  'State',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14),
-                                ),
-                              )),
-                              DataColumn(
-                                  label: Center(
-                                child: Text(
-                                  'Zip Code',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14),
-                                ),
-                              )),
-                              DataColumn(
-                                  label: Center(
-                                child: Text(
-                                  'Current',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14),
-                                ),
-                              )),
-                            ],
-                          )),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                padding: const EdgeInsets.all(30.0),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).canvasColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Container(
                       padding: const EdgeInsets.all(15.0),
                       decoration: BoxDecoration(
                         color: Theme.of(context).canvasColor,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
                       ),
-                      child: const Text(
-                        'WARNINGS',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 10),
+                          TextField(
+                            controller: _searchController,
+                            onChanged: (value) {
+                              setState(() {
+                                dataList = filterData!
+                                    .where((element) => element.name
+                                        .toLowerCase()
+                                        .contains(value.toLowerCase()))
+                                    .toList();
+                              });
+                            },
+                            style: const TextStyle(color: Colors.black),
+                            decoration: InputDecoration(
+                                filled: true,
+                                fillColor:
+                                    AppColors.secondaryColor.withOpacity(0.3),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  borderSide: BorderSide.none,
+                                ),
+                                hintText: "Search for a Name",
+                                prefixIcon: const Icon(Icons.search),
+                                prefixIconColor: Colors.black,
+                                suffixIcon: IconButton(
+                                    icon: const Icon(Icons.close,
+                                        color: Colors.black),
+                                    onPressed: () async {
+                                      _searchController.clear();
+                                      setState(() {
+                                        _getBuyers();
+                                      });
+                                    })),
+                          ),
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Theme(
+                                data: ThemeData.light().copyWith(
+                                    cardColor: Theme.of(context).canvasColor),
+                                child: PaginatedDataTable(
+                                  sortColumnIndex: 0,
+                                  sortAscending: sort,
+                                  source: RowSource<Buyer>(
+                                      dataList: dataList,
+                                      count: dataList.length),
+                                  rowsPerPage: dataList.length > 10 ? 10 :
+                                      dataList.isEmpty ? 1 : dataList.length,
+                                  columnSpacing: 8,
+                                  columns: const [
+                                    DataColumn(
+                                      label: Text(
+                                        'ID',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                        label: Text(
+                                      'Name',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14),
+                                    )),
+                                    DataColumn(
+                                        label: Text(
+                                      'Phone',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14),
+                                    )),
+                                    DataColumn(
+                                        label: Text(
+                                      'city',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14),
+                                    )),
+                                    DataColumn(
+                                        label: Center(
+                                      child: Text(
+                                        'State',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14),
+                                      ),
+                                    )),
+                                    DataColumn(
+                                        label: Center(
+                                      child: Text(
+                                        'Zip Code',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14),
+                                      ),
+                                    )),
+                                    DataColumn(
+                                        label: Center(
+                                      child: Text(
+                                        'Current',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14),
+                                      ),
+                                    )),
+                                  ],
+                                )),
+                          )
+                        ],
                       ),
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Theme(
-                          data: ThemeData.light().copyWith(
-                              cardColor: Theme.of(context).canvasColor),
-                          child: PaginatedDataTable(
-                            sortColumnIndex: 0,
-                            sortAscending: sort,
-                            source: RowSource<Warning>(
-                                dataList: warningsTest,
-                                count: warningsTest.length),
-                            rowsPerPage:
-                                warningsTest.isEmpty ? 1 : warningsTest.length,
-                            columnSpacing: 8,
-                            columns: const [
-                              DataColumn(
-                                label: Text(
-                                  'Date',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14),
-                                ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      padding: const EdgeInsets.all(30.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).canvasColor,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(15.0),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).canvasColor,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: const Text(
+                              'WARNINGS',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
-                              DataColumn(
-                                  label: Text(
-                                'Customer',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'ID',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'Description',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              )),
-                            ],
-                          )),
-                    )
-                  ],
-                ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Theme(
+                                data: ThemeData.light().copyWith(
+                                    cardColor: Theme.of(context).canvasColor),
+                                child: PaginatedDataTable(
+                                  sortColumnIndex: 0,
+                                  sortAscending: sort,
+                                  source: RowSource<Warning>(
+                                      dataList: warningsTest,
+                                      count: warningsTest.length),
+                                  rowsPerPage: warningsTest.isEmpty
+                                      ? 1
+                                      : warningsTest.length,
+                                  columnSpacing: 8,
+                                  columns: const [
+                                    DataColumn(
+                                      label: Text(
+                                        'Date',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                        label: Text(
+                                      'Customer',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14),
+                                    )),
+                                    DataColumn(
+                                        label: Text(
+                                      'ID',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14),
+                                    )),
+                                    DataColumn(
+                                        label: Text(
+                                      'Description',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14),
+                                    )),
+                                  ],
+                                )),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
       ),
     );
-  }
-
-  List<Buyer> _getData() {
-    return dataList;
   }
 }

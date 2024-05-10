@@ -33,13 +33,7 @@ class _MemberPageState extends State<MemberPage> {
 
   @override
   void initState() {
-    _controller.getSellers().then((value) {
-      setState(() {
-        dataList = value;
-      });
-    });
-
-    filterData = dataList;
+    _getSelers();
     super.initState();
   }
 
@@ -80,7 +74,7 @@ class _MemberPageState extends State<MemberPage> {
                 onChanged: (value) {
                   setState(() {
                     dataList = filterData!
-                        .where((element) => element.seller.contains(value))
+                        .where((element) => element.seller.toLowerCase().contains(value.toLowerCase()))
                         .toList();
                   });
                 },
@@ -100,9 +94,7 @@ class _MemberPageState extends State<MemberPage> {
                         onPressed: () async {
                           _searchController.clear();
                           setState(() {
-                            dataList = filterData!
-                                .where((element) => element.seller.contains(""))
-                                .toList();
+                            _getSelers();
                           });
                         })),
               ),
@@ -175,4 +167,14 @@ class _MemberPageState extends State<MemberPage> {
       ),
     );
   }
+
+  _getSelers() {
+    _controller.getSellers().then((value) {
+      setState(() {
+        dataList = value;
+        filterData = value;
+      });
+    });
+  }
+
 }

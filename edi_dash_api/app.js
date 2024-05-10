@@ -5,6 +5,7 @@ const session = require('express-session');
 const path = require('path');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 const port = process.env.SERVER_PORT;
@@ -46,6 +47,8 @@ app.use((req, res, next) => {
     res.locals.user = req.user;
     next();
 });
+
+app.use(cors({origin: "*"}));
 
 app.get('/edi_members', async (_, res) => {
     try {

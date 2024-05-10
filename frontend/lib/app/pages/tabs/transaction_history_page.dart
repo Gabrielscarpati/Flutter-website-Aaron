@@ -32,21 +32,27 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     }
   }
 
-  @override
-  void initState() {
+  _getOrders() {
     _controller.getOrders().then((value) {
       setState(() {
         orderList = value;
+        filterData = orderList;
       });
     });
+  }
 
+  _getLogs() {
     _controller.getLogs().then((value) {
       setState(() {
         logList = value;
       });
     });
+  }
 
-    filterData = orderList;
+  @override
+  void initState() {
+    _getOrders();
+    _getLogs();
     super.initState();
   }
 
@@ -92,8 +98,10 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                       onChanged: (value) {
                         setState(() {
                           orderList = filterData!
-                              .where((element) =>
-                                  element.id.toString().contains(value))
+                              .where((element) => element.id
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
                               .toList();
                         });
                       },
@@ -114,10 +122,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                               onPressed: () async {
                                 _searchController.clear();
                                 setState(() {
-                                  orderList = filterData!
-                                      .where((element) =>
-                                          element.id.toString().contains(""))
-                                      .toList();
+                                  _getOrders();
                                 });
                               })),
                     ),

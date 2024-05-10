@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
+
 import 'auth_interceptor.dart';
 
 class ApiConnection {
-  final String _url = "http://localhost:8080/";
+  final String _url = "http://localhost:5050/";
   late final Dio _dio;
 
   static ApiConnection? _instance;
