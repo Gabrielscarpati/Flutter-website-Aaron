@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_website_aaron/app/pages/login_page.dart';
 import 'package:flutter_website_aaron/app/pages/tabs/florida_tile_page.dart';
 import 'package:flutter_website_aaron/app/pages/tabs/member_page.dart';
 import 'package:flutter_website_aaron/app/pages/tabs/transaction_history_page.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
+import 'package:flutter_website_aaron/app/shared/storage.dart';
 import 'package:side_navigation/side_navigation.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,6 +37,7 @@ class _HomePageState extends State<HomePage> {
     MemberPage(),
     FloridaTilePage(),
     TransactionHistoryPage(),
+    LoginPage(),
   ];
 
   @override
@@ -64,8 +67,21 @@ class _HomePageState extends State<HomePage> {
                   icon: Icons.account_balance, label: 'Florida Tile'),
               SideNavigationBarItem(
                   icon: Icons.history, label: 'Transaction History'),
+              SideNavigationBarItem(icon: Icons.logout, label: 'Logout'),
             ],
-            onTap: _onItemTapped,
+            onTap: (index) {
+              if (index == 3) {
+                Storage.tokenStorage.delete(key: 'userId').then((value) => {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
+                      )
+                    });
+                return;
+              }
+              _onItemTapped(index);
+            },
             theme: SideNavigationBarTheme(
               togglerTheme: SideNavigationBarTogglerTheme.standard(),
               itemTheme: SideNavigationBarItemTheme(

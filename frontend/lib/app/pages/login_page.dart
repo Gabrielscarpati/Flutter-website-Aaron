@@ -26,18 +26,18 @@ class _LoginPageState extends State<LoginPage> {
       ],
       scrollable: true,
       userValidator: (value) {
-        // if(value!.isEmpty) {
-        //   return 'Please enter your e-email';
-        // }
-        // if(!value.contains('@') || !value.endsWith('.com')) {
-        //   return 'Please enter a valid e-mail';
-        // }
+        if(value!.isEmpty) {
+          return 'Please enter your e-email';
+        }
+        if(!value.contains('@') || !value.endsWith('.com')) {
+          return 'Please enter a valid e-mail';
+        }
         return null;
       },
       passwordValidator: (value) {
-        // if(value!.isEmpty) {
-        //   return 'Please enter your password';
-        // }
+        if(value!.isEmpty) {
+          return 'Please enter your password';
+        }
         return null;
       },
       onLogin: (loginData) async {
