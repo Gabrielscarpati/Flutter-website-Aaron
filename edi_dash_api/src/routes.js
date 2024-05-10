@@ -1,17 +1,19 @@
-const { Router } = require("express");
+const {
+  Router
+} = require("express");
 const Tools = require("./shared/Tools");
 const SellersController = require("./controllers/buyers_controller");
 const BuyersController = require("./controllers/buyers_controller");
 const QueuesController = require("./controllers/queues_controller");
 const LogsController = require("./controllers/logs_controller");
-const AutenticationController = require("./controllers/autentication_controller");
+const AuthenticationController = require("./controllers/authentication_controller");
 
 
 const sellersController = new SellersController();
 const buyersController = new BuyersController();
 const queuesController = new QueuesController();
 const logsController = new LogsController();
-const autenticationController = new AutenticationController();
+const autenticationController = new AuthenticationController();
 
 const router = Router()
   .get('/', function (req, res) {
@@ -39,12 +41,10 @@ const router = Router()
         password
       } = req.body;
 
-      const result = await autenticationController.login(
-        {
-          email_user,
-          password
-        }
-      );
+      const result = await autenticationController.login({
+        email_user,
+        password
+      });
 
       return result;
     });
@@ -56,13 +56,11 @@ const router = Router()
         password,
         seller_id
       } = req.body;
-      const result = await autenticationController.register(
-        {
-          email_user,
-          password,
-          seller_id
-        }
-      );
+      const result = await autenticationController.register({
+        email_user,
+        password,
+        seller_id
+      });
       return result;
     });
   })
@@ -72,12 +70,10 @@ const router = Router()
       const {
         refreshToken,
       } = req.body;
-      const result = await autenticationController.refreshToken(
-        {
-          user,
-          refreshToken
-        }
-      );
+      const result = await autenticationController.refreshToken({
+        user,
+        refreshToken
+      });
       return result;
     });
   })
