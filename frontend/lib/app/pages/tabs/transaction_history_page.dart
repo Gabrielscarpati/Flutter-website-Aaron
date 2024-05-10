@@ -109,7 +109,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                           orderList = filterData!
                               .where((element) => element.id.toString().contains(value))
                               .toList();
-                          // key.currentState!.pageTo(0);
+                          key.currentState!.pageTo(0);
                         });
                       },
                       style: const TextStyle(color: Colors.black),
