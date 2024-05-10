@@ -23,6 +23,8 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
 
   final TextEditingController _searchController = TextEditingController();
 
+  final key = GlobalKey<PaginatedDataTableState>();
+
   sortColumn(int columnIndex, bool ascending) {
     if (columnIndex == 0) {
       if (ascending) {
@@ -37,7 +39,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     _controller.getOrders().then((value) {
       setState(() {
         orderList = value;
-        filterData = orderList;
+        filterData = value;
         isLoading = false;
       });
     });
@@ -105,11 +107,9 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                       onChanged: (value) {
                         setState(() {
                           orderList = filterData!
-                              .where((element) => element.id
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(value.toLowerCase()))
+                              .where((element) => element.id.toString().contains(value))
                               .toList();
+                          // key.currentState!.pageTo(0);
                         });
                       },
                       style: const TextStyle(color: Colors.black),
@@ -140,11 +140,12 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                           data: ThemeData.light().copyWith(
                               cardColor: Theme.of(context).canvasColor),
                           child: PaginatedDataTable(
+                            key: key,
                             sortColumnIndex: 0,
                             sortAscending: sort,
                             source: RowSource(
                                 dataList: orderList, count: orderList.length),
-                            rowsPerPage:
+                            rowsPerPage: orderList.length > 10 ? 10 :
                                 orderList.isEmpty ? 1 : orderList.length,
                             columnSpacing: 8,
                             columns: [

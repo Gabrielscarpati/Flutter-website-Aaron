@@ -26,6 +26,8 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
 
   bool isLoading = true;
 
+  final key = GlobalKey<PaginatedDataTableState>();
+
   _getBuyers() {
     _controller.getBuyers().then((value) {
       setState(() {
@@ -100,6 +102,7 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                                         .toLowerCase()
                                         .contains(value.toLowerCase()))
                                     .toList();
+                                key.currentState?.pageTo(0);
                               });
                             },
                             style: const TextStyle(color: Colors.black),
@@ -131,6 +134,8 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                                 data: ThemeData.light().copyWith(
                                     cardColor: Theme.of(context).canvasColor),
                                 child: PaginatedDataTable(
+                                  key: key,
+                                  initialFirstRowIndex: 0,
                                   sortColumnIndex: 0,
                                   sortAscending: sort,
                                   source: RowSource<Buyer>(

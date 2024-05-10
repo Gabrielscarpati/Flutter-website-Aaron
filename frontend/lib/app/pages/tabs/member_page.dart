@@ -21,6 +21,8 @@ class _MemberPageState extends State<MemberPage> {
 
   final TextEditingController _searchController = TextEditingController();
 
+  final key = GlobalKey<PaginatedDataTableState>();
+
   sortColumn(int columnIndex, bool ascending) {
     if (columnIndex == 0) {
       if (ascending) {
@@ -74,8 +76,11 @@ class _MemberPageState extends State<MemberPage> {
                 onChanged: (value) {
                   setState(() {
                     dataList = filterData!
-                        .where((element) => element.seller.toLowerCase().contains(value.toLowerCase()))
+                        .where((element) => element.seller
+                            .toLowerCase()
+                            .contains(value.toLowerCase()))
                         .toList();
+                    key.currentState!.pageTo(0);
                   });
                 },
                 style: const TextStyle(color: Colors.black),
@@ -105,11 +110,16 @@ class _MemberPageState extends State<MemberPage> {
                     data: ThemeData.light()
                         .copyWith(cardColor: Theme.of(context).canvasColor),
                     child: PaginatedDataTable(
+                      key: key,
                       sortColumnIndex: 0,
                       sortAscending: sort,
                       source: RowSource<Seller>(
                           dataList: dataList, count: dataList.length),
-                      rowsPerPage: dataList.isEmpty ? 1 : dataList.length,
+                      rowsPerPage: dataList.length > 10
+                          ? 10
+                          : dataList.isEmpty
+                              ? 1
+                              : dataList.length,
                       columnSpacing: 8,
                       columns: [
                         DataColumn(
@@ -176,5 +186,4 @@ class _MemberPageState extends State<MemberPage> {
       });
     });
   }
-
 }
