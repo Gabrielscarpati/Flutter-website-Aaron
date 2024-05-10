@@ -10,4 +10,5 @@ class AppConstants {
 
   final String sellers = 'edi_members';
   final String buyers = 'edi_customers';
+  final String orders = 'american_flooring';
 }

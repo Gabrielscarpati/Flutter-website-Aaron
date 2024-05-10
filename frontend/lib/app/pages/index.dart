@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_website_aaron/app/pages/tabs/florida_tile_page.dart';
 import 'package:flutter_website_aaron/app/pages/tabs/member_page.dart';
-import 'package:flutter_website_aaron/app/pages/tabs/transaction_history.dart';
+import 'package:flutter_website_aaron/app/pages/tabs/transaction_history_page.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 import 'package:side_navigation/side_navigation.dart';
 
@@ -34,7 +34,7 @@ class _IndexPageState extends State<IndexPage> {
   final _widgetOptions = const <Widget>[
     MemberPage(),
     FloridaTilePage(),
-    TransactionHistory(),
+    TransactionHistoryPage(),
   ];
 
   @override

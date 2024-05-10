@@ -2,48 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/log.dart';
 import 'package:flutter_website_aaron/app/models/order.dart';
+import 'package:flutter_website_aaron/app/pages/tabs/tabs_controllers/transaction_history_page_controller.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
-class TransactionHistory extends StatefulWidget {
-  const TransactionHistory({super.key});
+class TransactionHistoryPage extends StatefulWidget {
+  const TransactionHistoryPage({super.key});
 
   @override
-  State<TransactionHistory> createState() => _TransactionHistoryState();
+  State<TransactionHistoryPage> createState() => _TransactionHistoryPageState();
 }
 
-class _TransactionHistoryState extends State<TransactionHistory> {
-  List<Order> orderList = [
-    Order(
-        date: 'Date 1',
-        numberOrder: 1,
-        document: 1,
-        sendReceived: 'Send Received 1',
-        status: 'Status 1'),
-    Order(
-        date: 'Date 2',
-        numberOrder: 2,
-        document: 2,
-        sendReceived: 'Send Received 2',
-        status: 'Status 2'),
-    Order(
-        date: 'Date 3',
-        numberOrder: 3,
-        document: 3,
-        sendReceived: 'Send Received 3',
-        status: 'Status 3'),
-    Order(
-        date: 'Date 4',
-        numberOrder: 4,
-        document: 4,
-        sendReceived: 'Send Received 4',
-        status: 'Status 4'),
-    Order(
-        date: 'Date 5',
-        numberOrder: 5,
-        document: 5,
-        sendReceived: 'Send Received 5',
-        status: 'Status 5'),
-  ];
+class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
+  final _controller = TransactionHistoryPageController.instance;
+
+  List<Order> orderList = List.empty(growable: true);
   List<Log> logList = [];
   bool sort = true;
   List<Order>? filterData;
@@ -53,15 +25,21 @@ class _TransactionHistoryState extends State<TransactionHistory> {
   sortColumn(int columnIndex, bool ascending) {
     if (columnIndex == 0) {
       if (ascending) {
-        filterData!.sort((a, b) => a.numberOrder.compareTo(b.numberOrder));
+        filterData!.sort((a, b) => a.id.compareTo(b.id));
       } else {
-        filterData!.sort((a, b) => b.numberOrder.compareTo(a.numberOrder));
+        filterData!.sort((a, b) => b.id.compareTo(a.id));
       }
     }
   }
 
   @override
   void initState() {
+    _controller.getOrders().then((value) {
+      setState(() {
+        orderList = value;
+      });
+    });
+
     filterData = orderList;
     super.initState();
   }
@@ -108,9 +86,8 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                       onChanged: (value) {
                         setState(() {
                           orderList = filterData!
-                              .where((element) => element.numberOrder
-                                  .toString()
-                                  .contains(value))
+                              .where((element) =>
+                                  element.id.toString().contains(value))
                               .toList();
                         });
                       },
@@ -132,9 +109,8 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                                 _searchController.clear();
                                 setState(() {
                                   orderList = filterData!
-                                      .where((element) => element.numberOrder
-                                          .toString()
-                                          .contains(""))
+                                      .where((element) =>
+                                          element.id.toString().contains(""))
                                       .toList();
                                 });
                               })),
@@ -239,8 +215,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                             sortAscending: sort,
                             source: RowSource<Log>(
                                 dataList: logList, count: logList.length),
-                            rowsPerPage:
-                                logList.isEmpty ? 1 : logList.length,
+                            rowsPerPage: logList.isEmpty ? 1 : logList.length,
                             columnSpacing: 8,
                             columns: const [
                               DataColumn(
