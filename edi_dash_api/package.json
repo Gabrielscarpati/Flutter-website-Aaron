@@ -16,15 +16,22 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
-    "passport": "^0.7.0",
-    "passport-local": "^1.0.0"
+    "path": "^0.12.7",
+    "rand-token": "^1.0.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "util": "^0.12.5"
   },
   "gitignore": [
     ".env",
     "node_modules"
   ],
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "swagger-autogen": "^2.23.7"
   }
 }
