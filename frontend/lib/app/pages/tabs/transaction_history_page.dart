@@ -19,6 +19,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   List<Log> logList = List.empty(growable: true);
   bool sort = true;
   List<Order>? filterData;
+  bool isLoading = true;
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -37,6 +38,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
       setState(() {
         orderList = value;
         filterData = orderList;
+        isLoading = false;
       });
     });
   }
@@ -51,8 +53,8 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
 
   @override
   void initState() {
-    _getOrders();
     _getLogs();
+    _getOrders();
     super.initState();
   }
 
@@ -78,7 +80,12 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
         ],
       )),
       body: SingleChildScrollView(
-        child: Row(
+        child: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            :
+        Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
@@ -226,7 +233,8 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                             sortAscending: sort,
                             source: RowSource<Log>(
                                 dataList: logList, count: logList.length),
-                            rowsPerPage: logList.isEmpty ? 1 : logList.length,
+                            rowsPerPage: logList.length > 10 ? 10 :
+                            logList.isEmpty ? 1 : logList.length,
                             columnSpacing: 8,
                             columns: const [
                               DataColumn(

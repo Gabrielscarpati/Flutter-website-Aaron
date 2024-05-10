@@ -36,14 +36,18 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
     });
   }
 
-  @override
-  void initState() {
-    _getBuyers();
+  _getWarnings() {
     _controller.getWarnings().then((value) {
       setState(() {
         warnings = value;
       });
     });
+  }
+
+  @override
+  void initState() {
+    _getBuyers();
+    _getWarnings();
     super.initState();
   }
 
@@ -130,10 +134,12 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                                   sortColumnIndex: 0,
                                   sortAscending: sort,
                                   source: RowSource<Buyer>(
-                                      dataList: dataList,
-                                      count: dataList.length),
-                                  rowsPerPage: dataList.length > 10 ? 10 :
-                                      dataList.isEmpty ? 1 : dataList.length,
+                                      dataList: dataList, count: dataList.length),
+                                  rowsPerPage: dataList.length > 10
+                                      ? 10
+                                      : dataList.isEmpty
+                                          ? 1
+                                          : dataList.length,
                                   columnSpacing: 8,
                                   columns: const [
                                     DataColumn(
@@ -239,9 +245,11 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                                   source: RowSource<Warning>(
                                       dataList: warnings,
                                       count: warnings.length),
-                                  rowsPerPage: warnings.isEmpty
-                                      ? 1
-                                      : warnings.length,
+                                  rowsPerPage: warnings.length > 10
+                                      ? 10
+                                      : warnings.isEmpty
+                                          ? 1
+                                          : warnings.length,
                                   columnSpacing: 8,
                                   columns: const [
                                     DataColumn(
