@@ -32,18 +32,20 @@ const router = Router()
       return result;
     });
   })
-  .post('/login', async function (req, res) {
+  .get('/login', async function (req, res) {
     return await Tools.bodyDefault(req, res, async function () {
       const {
         email_user,
         password
       } = req.body;
+
       const result = await autenticationController.login(
         {
           email_user,
           password
         }
       );
+
       return result;
     });
   })
@@ -64,21 +66,15 @@ const router = Router()
       return result;
     });
   })
-  .post('/refreshToken', async function (req, res) {
+  .get('/refreshToken', Tools.verifyJWTRefresh, async function (req, res) {
     return await Tools.bodyDefault(req, res, async function () {
-      const { 
+      const user = req.user;
+      const {
         refreshToken,
-        id,
-        email,
-        seller_id
-       } = req.body;
+      } = req.body;
       const result = await autenticationController.refreshToken(
         {
-          user: {
-            id,
-            email,
-            seller_id
-          },
+          user,
           refreshToken
         }
       );

@@ -62,7 +62,7 @@
       }
     },
     "/login": {
-      "put": {
+      "post": {
         "description": "",
         "parameters": [
           {
@@ -123,6 +123,11 @@
         "description": "",
         "parameters": [
           {
+            "name": "x-access-token",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
@@ -130,23 +135,17 @@
               "properties": {
                 "refreshToken": {
                   "example": "any"
-                },
-                "id": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "seller_id": {
-                  "example": "any"
                 }
               }
             }
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }

@@ -51,7 +51,8 @@ class AutenticationController {
     user,
     refreshToken
   }) {
-    const email = user.email_user;
+    const email = user.email;
+    console.log(refreshTokens)
     if ((email in refreshTokens) && (refreshTokens[email] == refreshToken)) {
       return this.gerarToken(user, email);
     }

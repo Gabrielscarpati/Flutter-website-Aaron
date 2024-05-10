@@ -34,6 +34,15 @@ class Tools {
 
 
 
+  static verifyJWTRefresh(req, res, next) {
+    const token = req.headers['x-access-token'];
+    if (!token) return res.status(400).json({ auth: false, message: 'Invalid Token' });
+    const decoded = jwt.decode(token)
+    req.user = decoded.user;
+    next();
+
+
+  }
   static verifyJWT(req, res, next) {
     var secret = config.secret;
     const token = req.headers['x-access-token'];
