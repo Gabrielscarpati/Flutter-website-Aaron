@@ -41,6 +41,8 @@ dependencies:
   intl: ^0.19.0
   loading_animation_widget: ^1.2.1
   flutter_secure_storage: ^9.1.1
+  fluid_dialog: ^2.0.0
+
 
 dev_dependencies:
   flutter_test:
