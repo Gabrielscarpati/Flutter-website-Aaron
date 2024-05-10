@@ -7,7 +7,7 @@ import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 import 'package:flutter_website_aaron/app/shared/storage.dart';
 import 'package:side_navigation/side_navigation.dart';
 
-import '../components/sdz_dialog_component.dart';
+import '../components/dialog_component.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
 
   _showLogoutDialog() {
     // set up the AlertDialog
-    final dialog = SdzDialogComponent(
+    final dialog = DialogComponent(
       title: 'Sair',
       content: 'Tem certeza que deseja sair do aplicativo?',
       onConfirm: () {

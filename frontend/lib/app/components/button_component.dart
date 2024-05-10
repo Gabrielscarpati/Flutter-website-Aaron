@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class SdzButton extends StatefulWidget {
+class ButtonComponent extends StatefulWidget {
   final String text;
   final Future<void> Function()? onTap;
   final bool? isBack;
   final bool? isExit;
 
-  const SdzButton({
+  const ButtonComponent({
     super.key,
     required this.text,
     required this.onTap,
@@ -15,25 +15,27 @@ class SdzButton extends StatefulWidget {
   });
 
   @override
-  State<SdzButton> createState() => _SdzButtonState();
+  State<ButtonComponent> createState() => _ButtonComponentState();
 }
 
-class _SdzButtonState extends State<SdzButton> {
+class _ButtonComponentState extends State<ButtonComponent> {
   bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
       icon: widget.isBack ?? false
-          ? const Icon(
+          ? Icon(
               Icons.close,
               size: 16,
               weight: 500,
+              color: Colors.grey.shade200,
             )
           : !(widget.isExit ?? false)
-              ? const Icon(Icons.check, size: 16)
-              : const Icon(
+              ? Icon(Icons.check, size: 16, color: Colors.grey.shade200)
+              : Icon(
                   Icons.logout,
+                  color: Colors.grey.shade200,
                   size: 16,
                 ),
       onPressed: () async {
@@ -49,21 +51,22 @@ class _SdzButtonState extends State<SdzButton> {
       },
       label: Text(
         widget.text,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 14,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
+          color: Colors.grey.shade200,
         ),
       ),
       style: TextButton.styleFrom(
           padding:
               const EdgeInsets.only(right: 10, left: 10, top: 5, bottom: 5),
           backgroundColor: widget.isBack ?? false
-              ? Theme.of(context).colorScheme.onBackground
+              ? Colors.grey.shade600
               : !(widget.isExit ?? false)
                   ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.error,
           shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.circular(5))),
+              borderRadius: BorderRadius.circular(10))),
     );
   }
 }

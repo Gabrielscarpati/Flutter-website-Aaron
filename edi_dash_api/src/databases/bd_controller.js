@@ -1,4 +1,3 @@
-
 const mysql = require('mysql');
 const util = require('util');
 const dotenv = require('dotenv');
@@ -14,7 +13,6 @@ const pool = mysql.createConnection({
 
 pool.connect(function (err) {
   if (err) throw err;
-  console.log("Connected!");
 });
 pool.query = util.promisify(pool.query);
 
@@ -141,4 +139,10 @@ const insert = (table) => {
   return new QueryBuilder(table).insert();
 };
 
-module.exports = { querySQL, select, update, remove, insert };
+module.exports = {
+  querySQL,
+  select,
+  update,
+  remove,
+  insert
+};

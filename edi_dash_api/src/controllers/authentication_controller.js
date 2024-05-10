@@ -11,10 +11,17 @@ const userController = new UserController();
 class AuthenticationController {
 
   gerarToken(user, email) {
-    const token = jwt.sign({ user }, secret, { expiresIn: 10 });
+    const token = jwt.sign({
+      user
+    }, secret, {
+      expiresIn: 5000,
+    });
     const refreshToken = randtoken.uid(256);
     refreshTokens[email] = refreshToken;
-    return { token, refreshToken };
+    return {
+      token,
+      refreshToken
+    };
   }
 
   async login({
@@ -26,7 +33,10 @@ class AuthenticationController {
       throw new Error("User not found");
     }
     const firstUser = user[0]
-    const { token, refreshToken } = this.gerarToken(firstUser, email_user);
+    const {
+      token,
+      refreshToken
+    } = this.gerarToken(firstUser, email_user);
     return {
       token,
       refreshToken,
@@ -52,7 +62,6 @@ class AuthenticationController {
     refreshToken
   }) {
     const email = user.email;
-    console.log(refreshTokens)
     if ((email in refreshTokens) && (refreshTokens[email] == refreshToken)) {
       return this.gerarToken(user, email);
     }

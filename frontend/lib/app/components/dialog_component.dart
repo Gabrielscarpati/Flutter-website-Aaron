@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'sdz_button.dart';
+import 'button_component.dart';
 
-class SdzDialogComponent extends StatefulWidget {
+class DialogComponent extends StatefulWidget {
   final String title;
   final String content;
   final void Function() onConfirm;
   final String buttonConfirmText;
   final bool? isExitButton;
 
-  const SdzDialogComponent({
+  const DialogComponent({
     super.key,
     required this.title,
     required this.content,
@@ -19,24 +19,24 @@ class SdzDialogComponent extends StatefulWidget {
   });
 
   @override
-  State<SdzDialogComponent> createState() => _SdzDialogComponentState();
+  State<DialogComponent> createState() => _DialogComponentState();
 }
 
-class _SdzDialogComponentState extends State<SdzDialogComponent> {
+class _DialogComponentState extends State<DialogComponent> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(widget.title),
       content: Text(widget.content),
       surfaceTintColor: Colors.transparent,
-      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20)),
       actions: [
-        SdzButton(
+        ButtonComponent(
           text: 'Cancelar',
           isBack: true,
           onTap: () async => Navigator.pop(context),
         ),
-        SdzButton(
+        ButtonComponent(
           text: widget.buttonConfirmText,
           onTap: () async {
             widget.onConfirm.call();
