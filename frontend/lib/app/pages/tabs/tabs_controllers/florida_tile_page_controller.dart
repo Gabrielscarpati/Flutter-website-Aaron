@@ -17,15 +17,15 @@ class FloridaTilePageController {
   final constants = AppConstants.instance;
 
   Future<List<Buyer>> getBuyers() async {
-    final response =
-        await ApiConnection.instance.get<List>(path: constants.buyers);
+    final result = await ApiConnection.instance.get(path: constants.buyers);
+    final response = result['response'] as List;
     final list = response.map((e) => Buyer.fromJson(e)).toList();
     return list;
   }
 
   Future<List<Warning>> getWarnings() async {
-    final response =
-        await ApiConnection.instance.get<List>(path: constants.logs);
+    final result = await ApiConnection.instance.get(path: constants.logs);
+    final response = result['response'] as List;
     final list = response.map((e) => Warning.fromJson(e)).toList();
     return list;
   }

@@ -8,8 +8,16 @@ class AppConstants {
     return _instance!;
   }
 
-  final String sellers = 'edi_members';
-  final String buyers = 'edi_customers';
-  final String orders = 'american_flooring';
-  final String logs = 'warnings';
+  //tables
+  final String sellers = 'sellers';
+  final String buyers = 'buyers';
+  final String queues = 'queues';
+
+  //error log tables
+  final String logs = 'logs/error';
+
+  //authentication
+  final String login = 'login';
+  final String register = 'register';
+  final String refreshToken = 'refreshToken';
 }

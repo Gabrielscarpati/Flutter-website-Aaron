@@ -16,8 +16,8 @@ class MemberPageController {
   final constants = AppConstants.instance;
 
   Future<List<Seller>> getSellers() async {
-    final response =
-        await ApiConnection.instance.get<List>(path: constants.sellers);
+    final result = await ApiConnection.instance.get(path: constants.sellers);
+    final response = result['response'] as List;
     final list = response.map((e) => Seller.fromJson(e)).toList();
     return list;
   }

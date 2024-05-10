@@ -17,15 +17,15 @@ class TransactionHistoryPageController {
   final constants = AppConstants.instance;
 
   Future<List<Order>> getOrders() async {
-    final response =
-        await ApiConnection.instance.get<List>(path: constants.orders);
+    final result = await ApiConnection.instance.get(path: constants.queues);
+    final response = result['response'] as List;
     final list = response.map((e) => Order.fromJson(e)).toList();
     return list;
   }
 
   Future<List<Log>> getLogs() async {
-    final response =
-        await ApiConnection.instance.get<List>(path: constants.logs);
+    final result = await ApiConnection.instance.get(path: constants.logs);
+    final response = result['response'] as List;
     final list = response.map((e) => Log.fromJson(e)).toList();
     return list;
   }

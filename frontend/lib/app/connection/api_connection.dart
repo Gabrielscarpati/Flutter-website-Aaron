@@ -18,7 +18,7 @@ class ApiConnection {
     _dio.interceptors.add(AuthInterceptor());
   }
 
-  Future<T> get<T>({
+  Future<Map<String, dynamic>> get({
     required String path,
     Map<String, dynamic>? queryParameters,
   }) async {
