@@ -23,12 +23,14 @@ class LoginPageController {
 
   Future<String?> authenticate() async {
     try {
+      final data = {
+        'email_user': emailController.text,
+        'password': passwordController.text
+      };
+
       final response = await ApiConnection.instance.login(
         path: constants.login,
-        data: {
-          'email_user': emailController.text,
-          'password': passwordController.text
-        },
+        data: data,
       );
 
       await Storage.tokenStorage.write(

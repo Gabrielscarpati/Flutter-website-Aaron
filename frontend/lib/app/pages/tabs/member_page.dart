@@ -18,7 +18,7 @@ class _MemberPageState extends State<MemberPage> {
   List<Seller> dataList = List.empty(growable: true);
 
   bool sort = true;
-  List<Seller>? filterData;
+  List<Seller> filterData = [];
   bool _isLoading = true;
 
   final TextEditingController _searchController = TextEditingController();
@@ -26,12 +26,10 @@ class _MemberPageState extends State<MemberPage> {
   final key = GlobalKey<PaginatedDataTableState>();
 
   sortColumn(int columnIndex, bool ascending) {
-    if (columnIndex == 0) {
-      if (ascending) {
-        filterData!.sort((a, b) => a.seller.compareTo(b.seller));
-      } else {
-        filterData!.sort((a, b) => b.seller.compareTo(a.seller));
-      }
+    if (ascending) {
+      dataList.sort((a, b) => a.seller.compareTo(b.seller));
+    } else {
+      dataList.sort((a, b) => b.seller.compareTo(a.seller));
     }
   }
 
@@ -79,7 +77,7 @@ class _MemberPageState extends State<MemberPage> {
                       controller: _searchController,
                       onChanged: (value) {
                         setState(() {
-                          dataList = filterData!
+                          dataList = filterData
                               .where((element) => element.seller
                                   .toLowerCase()
                                   .contains(value.toLowerCase()))
@@ -89,24 +87,28 @@ class _MemberPageState extends State<MemberPage> {
                       },
                       style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColors.secondaryColor.withOpacity(0.3),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          hintText: "Search for a Seller",
-                          prefixIcon: const Icon(Icons.search),
-                          prefixIconColor: Colors.black,
-                          suffixIcon: IconButton(
-                              icon:
-                                  const Icon(Icons.close, color: Colors.black),
-                              onPressed: () async {
-                                _searchController.clear();
-                                setState(() {
-                                  _getSellers();
-                                });
-                              })),
+                        filled: true,
+                        fillColor: AppColors.secondaryColor.withOpacity(0.3),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        hintText: "Search for a Seller",
+                        prefixIcon: const Icon(Icons.search),
+                        prefixIconColor: Colors.black,
+                        suffixIcon: _searchController.text.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.close,
+                                    color: Colors.black),
+                                onPressed: () async {
+                                  setState(() {
+                                    _searchController.clear();
+                                    dataList = filterData;
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     SizedBox(

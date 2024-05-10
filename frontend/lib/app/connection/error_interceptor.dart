@@ -32,11 +32,11 @@ class ErrorInterceptor extends Interceptor {
           _lockAuthInterceptor = true;
 
           final response = await _refreshToken(err.response!.requestOptions);
+          debugPrint('atualizou token');
 
           _lockAuthInterceptor = false;
           return handler.resolve(response);
         } catch (error) {
-          debugPrint(error.toString());
           _logOff();
         }
       }
@@ -57,13 +57,24 @@ class ErrorInterceptor extends Interceptor {
   Future<dynamic> _refreshToken(RequestOptions requestOptions) async {
     //Atualiza o token
     final oldTokens = await Storage.tokenStorage.read(key: 'userId');
-
     if (oldTokens != null) {
-      final newTokens = await ApiConnection.instance.post(
-          path: _constants.refreshToken,
-          data: {"refreshToken": jsonDecode(oldTokens)['refreshToken']});
+      final tokens = jsonDecode(oldTokens);
+      final result = await ApiConnection.instance.post(
+        path: _constants.refreshToken,
+        data: {
+          'refreshToken': tokens['refreshToken'],
+        },
+      );
+      final newTokens = result['response'];
+
       await Storage.tokenStorage
           .write(key: 'userId', value: jsonEncode(newTokens));
+      requestOptions = requestOptions.copyWith(
+        headers: {
+          'x-access-token': newTokens['token'],
+        },
+      );
+      // requestOptions.headers['x-access-token'] = newTokens['token'];
     }
 
     //refaz a requisição

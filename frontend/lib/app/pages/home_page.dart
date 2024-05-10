@@ -7,6 +7,8 @@ import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 import 'package:flutter_website_aaron/app/shared/storage.dart';
 import 'package:side_navigation/side_navigation.dart';
 
+import '../components/sdz_dialog_component.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -37,7 +39,6 @@ class _HomePageState extends State<HomePage> {
     MemberPage(),
     FloridaTilePage(),
     TransactionHistoryPage(),
-    LoginPage(),
   ];
 
   @override
@@ -71,15 +72,10 @@ class _HomePageState extends State<HomePage> {
             ],
             onTap: (index) {
               if (index == 3) {
-                Storage.tokenStorage.delete(key: 'userId').then((value) => {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()),
-                      )
-                    });
+                _showLogoutDialog();
                 return;
               }
+
               _onItemTapped(index);
             },
             theme: SideNavigationBarTheme(
@@ -102,6 +98,32 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+    );
+  }
+
+  _showLogoutDialog() {
+    // set up the AlertDialog
+    final dialog = SdzDialogComponent(
+      title: 'Sair',
+      content: 'Tem certeza que deseja sair do aplicativo?',
+      onConfirm: () {
+        Storage.tokenStorage.delete(key: 'userId').then((value) {
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
+        });
+      },
+      buttonConfirmText: 'Sair',
+      isExitButton: true,
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (_) {
+        return dialog;
+      },
     );
   }
 }

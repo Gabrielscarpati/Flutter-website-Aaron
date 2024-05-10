@@ -20,7 +20,7 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
   List<Buyer> dataList = List.empty(growable: true);
 
   bool sort = true;
-  List<Buyer>? filterData;
+  List<Buyer> filterData = [];
   final TextEditingController _searchController = TextEditingController();
 
   List<Warning> warnings = List.empty(growable: true);
@@ -29,28 +29,20 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
 
   final key = GlobalKey<PaginatedDataTableState>();
 
-  _getBuyers() {
-    _controller.getBuyers().then((value) {
-      setState(() {
-        dataList = value;
-        filterData = dataList;
-        _isLoading = false;
-      });
-    });
-  }
-
-  _getWarnings() {
-    _controller.getWarnings().then((value) {
-      setState(() {
-        warnings = value;
-      });
+  _initRequests() async {
+    final buyers = await _controller.getBuyers();
+    final warningsApi = await _controller.getWarnings();
+    setState(() {
+      dataList = buyers;
+      warnings = warningsApi;
+      filterData = dataList;
+      _isLoading = false;
     });
   }
 
   @override
   void initState() {
-    _getBuyers();
-    _getWarnings();
+    _initRequests();
     super.initState();
   }
 
@@ -111,7 +103,8 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                       Expanded(
                         flex: 2,
                         child: Container(
-                          padding: const EdgeInsets.only(right: 15.0, left: 15, top: 5),
+                          padding: const EdgeInsets.only(
+                              right: 15.0, left: 15, top: 5),
                           decoration: BoxDecoration(
                             color: Theme.of(context).canvasColor,
                             borderRadius:
@@ -125,7 +118,7 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                                 controller: _searchController,
                                 onChanged: (value) {
                                   setState(() {
-                                    dataList = filterData!
+                                    dataList = filterData
                                         .where((element) => element.name
                                             .toLowerCase()
                                             .contains(value.toLowerCase()))
@@ -135,25 +128,28 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                                 },
                                 style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: AppColors.secondaryColor
-                                        .withOpacity(0.3),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    hintText: "Search for a Name",
-                                    prefixIcon: const Icon(Icons.search),
-                                    prefixIconColor: Colors.black,
-                                    suffixIcon: IconButton(
-                                        icon: const Icon(Icons.close,
-                                            color: Colors.black),
-                                        onPressed: () async {
-                                          _searchController.clear();
-                                          setState(() {
-                                            _getBuyers();
-                                          });
-                                        })),
+                                  filled: true,
+                                  fillColor:
+                                      AppColors.secondaryColor.withOpacity(0.3),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  hintText: "Search for a Name",
+                                  prefixIcon: const Icon(Icons.search),
+                                  prefixIconColor: Colors.black,
+                                  suffixIcon: _searchController.text.isNotEmpty
+                                      ? IconButton(
+                                          icon: const Icon(Icons.close,
+                                              color: Colors.black),
+                                          onPressed: () async {
+                                            setState(() {
+                                              _searchController.clear();
+                                              dataList = filterData;
+                                            });
+                                          })
+                                      : null,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               SizedBox(
@@ -260,8 +256,8 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(
-              onPressed: Navigator.of(context).pop,
-              icon: const Icon(Icons.close)),
+                onPressed: Navigator.of(context).pop,
+                icon: const Icon(Icons.close)),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.only(bottom: 15),

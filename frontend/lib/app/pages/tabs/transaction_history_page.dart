@@ -19,7 +19,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   List<Order> orderList = List.empty(growable: true);
   List<Log> logList = List.empty(growable: true);
   bool sort = true;
-  List<Order>? filterData;
+  List<Order> filterData = [];
   bool _isLoading = true;
 
   final TextEditingController _searchController = TextEditingController();
@@ -27,36 +27,27 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   final key = GlobalKey<PaginatedDataTableState>();
 
   sortColumn(int columnIndex, bool ascending) {
-    if (columnIndex == 0) {
-      if (ascending) {
-        filterData!.sort((a, b) => a.id.compareTo(b.id));
-      } else {
-        filterData!.sort((a, b) => b.id.compareTo(a.id));
-      }
+    if (ascending) {
+      orderList.sort((a, b) => a.id.compareTo(b.id));
+    } else {
+      orderList.sort((a, b) => b.id.compareTo(a.id));
     }
   }
 
-  _getOrders() {
-    _controller.getOrders().then((value) {
-      setState(() {
-        orderList = value;
-        filterData = value;
-        _isLoading = false;
-      });
-    });
-  }
+  _getOrders() async {
+    final orders = await _controller.getOrders();
+    final logs = await _controller.getLogs();
 
-  _getLogs() {
-    _controller.getLogs().then((value) {
-      setState(() {
-        logList = value;
-      });
+    setState(() {
+      orderList = orders;
+      logList = logs;
+      filterData = orders;
+      _isLoading = false;
     });
   }
 
   @override
   void initState() {
-    _getLogs();
     _getOrders();
     super.initState();
   }
@@ -133,7 +124,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                 controller: _searchController,
                                 onChanged: (value) {
                                   setState(() {
-                                    orderList = filterData!
+                                    orderList = filterData
                                         .where((element) => element.id
                                             .toString()
                                             .contains(value))
@@ -143,25 +134,28 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                 },
                                 style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: AppColors.secondaryColor
-                                        .withOpacity(0.3),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    hintText: "Search for a Order number",
-                                    prefixIcon: const Icon(Icons.search),
-                                    prefixIconColor: Colors.black,
-                                    suffixIcon: IconButton(
-                                        icon: const Icon(Icons.close,
-                                            color: Colors.black),
-                                        onPressed: () async {
-                                          _searchController.clear();
-                                          setState(() {
-                                            _getOrders();
-                                          });
-                                        })),
+                                  filled: true,
+                                  fillColor:
+                                      AppColors.secondaryColor.withOpacity(0.3),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  hintText: "Search for a Order number",
+                                  prefixIcon: const Icon(Icons.search),
+                                  prefixIconColor: Colors.black,
+                                  suffixIcon: _searchController.text.isNotEmpty
+                                      ? IconButton(
+                                          icon: const Icon(Icons.close,
+                                              color: Colors.black),
+                                          onPressed: () async {
+                                            setState(() {
+                                              _searchController.clear();
+                                              orderList = filterData;
+                                            });
+                                          })
+                                      : null,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               SizedBox(
@@ -255,8 +249,8 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(
-              onPressed: Navigator.of(context).pop,
-              icon: const Icon(Icons.close)),
+                onPressed: Navigator.of(context).pop,
+                icon: const Icon(Icons.close)),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(15.0),
