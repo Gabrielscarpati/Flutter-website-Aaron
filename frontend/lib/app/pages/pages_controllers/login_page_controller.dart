@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_website_aaron/app/shared/app_constants.dart';
 import 'package:flutter_website_aaron/app/shared/storage.dart';
@@ -31,7 +33,10 @@ class LoginPageController {
 
       await Storage.tokenStorage.write(
         key: 'userId',
-        value: response.data['response']['token'],
+        value: jsonEncode({
+          'token': response.data['response']['token'],
+          'refreshToken': response.data['response']['refreshToken']
+        }),
       );
 
       return null;
