@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:flutter_website_aaron/app/pages/index.dart';
+import 'package:flutter_website_aaron/app/pages/home_page.dart';
 import 'package:flutter_website_aaron/app/pages/pages_controllers/login_page_controller.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
       onSubmitAnimationCompleted: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const IndexPage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       },
       onRecoverPassword: (String string) {

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_website_aaron/app/components/loading_component.dart';
 import 'package:flutter_website_aaron/app/pages/login_page.dart';
+import 'package:flutter_website_aaron/app/shared/storage.dart';
+
+import 'app/pages/home_page.dart';
 
 void main() {
   runApp(const EDIDashApp());
@@ -16,7 +20,17 @@ class EDIDashApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: FutureBuilder(
+        initialData: const LoadingComponent(),
+        future: Storage.tokenStorage.read(key: 'userId'),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const LoginPage();
+          }
+
+          return const HomePage();
+        },
+      ),
     );
   }
 }

@@ -5,14 +5,14 @@ import 'package:flutter_website_aaron/app/pages/tabs/transaction_history_page.da
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 import 'package:side_navigation/side_navigation.dart';
 
-class IndexPage extends StatefulWidget {
-  const IndexPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<IndexPage> createState() => _IndexPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _IndexPageState extends State<IndexPage> {
+class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   final TextStyle optionStyle = const TextStyle(
     fontSize: 30,
