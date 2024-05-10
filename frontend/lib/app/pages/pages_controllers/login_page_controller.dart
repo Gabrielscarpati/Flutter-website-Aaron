@@ -35,8 +35,8 @@ class LoginPageController {
       );
 
       return null;
-    } catch (e) {
-      return 'Invalid credentials! $e';
+    } catch (_) {
+      return 'Invalid credentials!';
     }
   }
 }
