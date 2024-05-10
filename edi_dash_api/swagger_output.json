@@ -119,33 +119,18 @@
       }
     },
     "/refreshToken": {
-      "post": {
+      "get": {
         "description": "",
         "parameters": [
           {
             "name": "x-access-token",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "refreshToken": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
           "400": {
             "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
           }
         }
       }
