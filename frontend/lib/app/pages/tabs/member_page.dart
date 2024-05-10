@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_website_aaron/app/components/loading_component.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/seller.dart';
-import 'package:flutter_website_aaron/app/pages/tabs/tabs_controllers/member_page_controller.dart';
+import 'package:flutter_website_aaron/app/pages/pages_controllers/tabs_controllers/member_page_controller.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
 class MemberPage extends StatefulWidget {

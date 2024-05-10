@@ -3,7 +3,7 @@ import 'package:flutter_website_aaron/app/components/loading_component.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/log.dart';
 import 'package:flutter_website_aaron/app/models/order.dart';
-import 'package:flutter_website_aaron/app/pages/tabs/tabs_controllers/transaction_history_page_controller.dart';
+import 'package:flutter_website_aaron/app/pages/pages_controllers/tabs_controllers/transaction_history_page_controller.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
 class TransactionHistoryPage extends StatefulWidget {

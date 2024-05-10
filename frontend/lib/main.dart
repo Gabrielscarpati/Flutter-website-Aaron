@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_aaron/app/pages/login.dart';
+import 'package:flutter_website_aaron/app/pages/login_page.dart';
 
 void main() {
   runApp(const EDIDashApp());
@@ -16,7 +16,7 @@ class EDIDashApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage()
+      home: const LoginPage(),
     );
   }
 }
