@@ -29,7 +29,7 @@ class LoginPageController {
         },
       );
 
-      Storage.tokenStorage.write(
+      await Storage.tokenStorage.write(
         key: 'userId',
         value: response.data['response']['token'],
       );
