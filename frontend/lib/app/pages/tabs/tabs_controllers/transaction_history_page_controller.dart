@@ -1,4 +1,5 @@
 import 'package:flutter_website_aaron/app/models/order.dart';
+import 'package:flutter_website_aaron/app/models/log.dart';
 import 'package:flutter_website_aaron/app/shared/app_constants.dart';
 
 import '../../../connection/api_connection.dart';
@@ -19,6 +20,13 @@ class TransactionHistoryPageController {
     final response =
         await ApiConnection.instance.get<List>(path: constants.orders);
     final list = response.map((e) => Order.fromJson(e)).toList();
+    return list;
+  }
+
+  Future<List<Log>> getLogs() async {
+    final response =
+        await ApiConnection.instance.get<List>(path: constants.logs);
+    final list = response.map((e) => Log.fromJson(e)).toList();
     return list;
   }
 }

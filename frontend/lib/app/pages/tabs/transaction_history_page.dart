@@ -16,7 +16,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   final _controller = TransactionHistoryPageController.instance;
 
   List<Order> orderList = List.empty(growable: true);
-  List<Log> logList = [];
+  List<Log> logList = List.empty(growable: true);
   bool sort = true;
   List<Order>? filterData;
 
@@ -37,6 +37,12 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     _controller.getOrders().then((value) {
       setState(() {
         orderList = value;
+      });
+    });
+
+    _controller.getLogs().then((value) {
+      setState(() {
+        logList = value;
       });
     });
 

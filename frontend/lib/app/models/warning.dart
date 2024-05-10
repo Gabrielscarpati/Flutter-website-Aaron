@@ -1,4 +1,5 @@
 import 'package:flutter_website_aaron/app/framework/imodel.dart';
+import 'package:intl/intl.dart';
 
 class Warning extends IModel {
   final String date;
@@ -20,5 +21,20 @@ class Warning extends IModel {
       'id': id,
       'description': description,
     };
+  }
+
+  factory Warning.fromJson(Map<String, dynamic> json) {
+    return Warning(
+      date: DateTime.tryParse(json['created_at'].toString()) != null
+          ? DateFormat('MM/dd/yyyy')
+              .add_jm()
+              .format(DateTime.parse(json['created_at']))
+          : DateFormat('MM/dd/yyyy')
+              .add_jm()
+              .format(DateTime.parse(json['created_at'])),
+      customer: json['category'] ?? '',
+      id: json['id'] ?? '',
+      description: json['message'],
+    );
   }
 }
