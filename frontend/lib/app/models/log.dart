@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 class Log extends IModel {
   final String date;
   final String taskDescription;
-  final String id;
+  final int id;
   final String error;
 
   Log({
@@ -33,9 +33,9 @@ class Log extends IModel {
           : DateFormat('MM/dd/yyyy')
               .add_jm()
               .format(DateTime.parse(json['created_at'])),
-      taskDescription: json['category'],
+      taskDescription: json['message'],
       id: json['id'] ?? '',
-      error: json['message'] ?? '',
+      error: json['category'] ?? '',
     );
   }
 }

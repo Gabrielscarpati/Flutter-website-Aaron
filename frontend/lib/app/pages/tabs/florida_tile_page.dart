@@ -21,7 +21,9 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
   bool sort = true;
   List<Buyer>? filterData;
   final TextEditingController _searchController = TextEditingController();
-  List<Warning> warningsTest = [];
+
+  List<Warning> warnings = List.empty(growable: true);
+
   bool isLoading = true;
 
   _getBuyers() {
@@ -37,6 +39,11 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
   @override
   void initState() {
     _getBuyers();
+    _controller.getWarnings().then((value) {
+      setState(() {
+        warnings = value;
+      });
+    });
     super.initState();
   }
 
@@ -230,11 +237,11 @@ class _FloridaTilePageState extends State<FloridaTilePage> {
                                   sortColumnIndex: 0,
                                   sortAscending: sort,
                                   source: RowSource<Warning>(
-                                      dataList: warningsTest,
-                                      count: warningsTest.length),
-                                  rowsPerPage: warningsTest.isEmpty
+                                      dataList: warnings,
+                                      count: warnings.length),
+                                  rowsPerPage: warnings.isEmpty
                                       ? 1
-                                      : warningsTest.length,
+                                      : warnings.length,
                                   columnSpacing: 8,
                                   columns: const [
                                     DataColumn(
