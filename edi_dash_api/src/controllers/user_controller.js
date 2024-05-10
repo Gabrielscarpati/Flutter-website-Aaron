@@ -16,7 +16,7 @@ class UserController {
     const result = await select("email, seller_id, id", "users")
       .where(`email = '${email}' AND password = '${password}'`)
       .execute();
-    console.log(result)
+    
     return result
   }
 

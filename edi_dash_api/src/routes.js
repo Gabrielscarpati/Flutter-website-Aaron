@@ -32,7 +32,7 @@ const router = Router()
       return result;
     });
   })
-  .put('/login', async function (req, res) {
+  .post('/login', async function (req, res) {
     return await Tools.bodyDefault(req, res, async function () {
       const {
         email_user,

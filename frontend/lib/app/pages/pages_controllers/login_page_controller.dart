@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_website_aaron/app/shared/app_constants.dart';
+import 'package:flutter_website_aaron/app/shared/storage.dart';
 
 import '../../connection/api_connection.dart';
-import '../../shared/storage.dart';
 
 class LoginPageController {
   LoginPageController._();
@@ -24,19 +24,19 @@ class LoginPageController {
       final response = await ApiConnection.instance.login(
         path: constants.login,
         data: {
-          'email': emailController.text,
+          'email_user': emailController.text,
           'password': passwordController.text
         },
       );
 
       Storage.tokenStorage.write(
         key: 'userId',
-        value: response.data['response']['credentials']['token'],
+        value: response.data['response']['token'],
       );
 
       return null;
-    } catch (_) {
-      return 'Invalid credentials!';
+    } catch (e) {
+      return 'Invalid credentials! $e';
     }
   }
 }
