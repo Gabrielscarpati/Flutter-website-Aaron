@@ -119,13 +119,25 @@
       }
     },
     "/refreshToken": {
-      "get": {
+      "post": {
         "description": "",
         "parameters": [
           {
             "name": "x-access-token",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {

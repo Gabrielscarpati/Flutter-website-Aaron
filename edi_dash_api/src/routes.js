@@ -66,7 +66,7 @@ const router = Router()
       return result;
     });
   })
-  .get('/refreshToken', Tools.verifyJWTRefresh, async function (req, res) {
+  .post('/refreshToken', Tools.verifyJWTRefresh, async function (req, res) {
     return await Tools.bodyDefault(req, res, async function () {
       const user = req.user;
       const {
