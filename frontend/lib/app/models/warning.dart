@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 class Warning extends IModel {
   final String date;
   final String customer;
-  final String id;
+  final int id;
   final String description;
 
   Warning(
