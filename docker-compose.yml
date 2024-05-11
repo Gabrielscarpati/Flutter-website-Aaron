@@ -4,7 +4,7 @@ services:
   flutter_web:
     image: nginx:alpine
     ports:
-      - "8080:80"
+      - "8080:8080"
     volumes:
       - ./frontend/build/web:/usr/share/nginx/html
     command: ["nginx", "-g", "daemon off;"]
