@@ -104,8 +104,8 @@ class _HomePageState extends State<HomePage> {
   _showLogoutDialog() {
     // set up the AlertDialog
     final dialog = DialogComponent(
-      title: 'Sair',
-      content: 'Tem certeza que deseja sair do aplicativo?',
+      title: 'Exit',
+      content: 'Are you sure you want to exit the app?',
       onConfirm: () {
         StorageRepositor.remove(key: 'userId').then((value) {
           Navigator.pop(context);
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
           );
         });
       },
-      buttonConfirmText: 'Sair',
+      buttonConfirmText: 'exit',
       isExitButton: true,
     );
     // show the dialog
