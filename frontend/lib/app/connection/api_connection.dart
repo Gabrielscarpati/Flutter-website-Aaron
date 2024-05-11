@@ -7,8 +7,7 @@ import 'dart:html';
 class ApiConnection {
   String getApiUrl() {
     var uri = Uri.parse(window.location.href);
-    var apiPort = 5050;
-    return "${uri.scheme}://${uri.host}:$apiPort";
+    return "${uri.scheme}://${uri.host}/api";
   }
 
   late final String _url = getApiUrl();
