@@ -27,7 +27,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     ports:
-      - "6060:6060"
+      - "80:80"
     networks:
       - edi_dash_network
     depends_on:
