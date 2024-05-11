@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  flutter_web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend/build/web:/usr/share/nginx/html
+    command: ["nginx", "-g", "daemon off;"]
+
+  edi_dash_api:
+    build:
+      context: ./edi_dash_api
+      dockerfile: Dockerfile
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./edi_dash_api:/usr/src/app
+    networks:
+      - edi_dash_network
+
+networks:
+  edi_dash_network:
+    name: edi_dash_network
+    driver: bridge

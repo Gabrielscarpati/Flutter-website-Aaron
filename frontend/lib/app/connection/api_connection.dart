@@ -2,9 +2,16 @@ import 'package:dio/dio.dart';
 import 'package:flutter_website_aaron/app/connection/error_interceptor.dart';
 
 import 'auth_interceptor.dart';
+import 'dart:html';
 
 class ApiConnection {
-  final String _url = "http://localhost:5050/";
+  String getApiUrl() {
+    var uri = Uri.parse(window.location.href);
+    var apiPort = 5050;
+    return "${uri.scheme}://${uri.host}:$apiPort";
+  }
+
+  late final String _url = getApiUrl();
   late final Dio _dio;
 
   static ApiConnection? _instance;
