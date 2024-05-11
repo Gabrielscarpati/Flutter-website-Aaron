@@ -20,6 +20,21 @@ services:
     networks:
       - edi_dash_network
 
+  nginx:
+    container_name: nginx
+    restart: always
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - edi_dash_network
+    depends_on:
+      - edi_dash_api 
+      - flutter_web
+
 networks:
   edi_dash_network:
     driver: bridge
