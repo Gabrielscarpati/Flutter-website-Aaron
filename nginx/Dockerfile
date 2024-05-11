@@ -5,7 +5,7 @@ FROM nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expõe as portas 80 para tráfego HTTP
-EXPOSE 80
+EXPOSE 6060
 
 # Inicia o NGINX em primeiro plano para que o container não termine imediatamente
 CMD ["nginx", "-g", "daemon off;"]
