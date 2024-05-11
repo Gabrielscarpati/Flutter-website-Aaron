@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
       title: 'Sair',
       content: 'Tem certeza que deseja sair do aplicativo?',
       onConfirm: () {
-        Storage.tokenStorage.delete(key: 'userId').then((value) {
+        StorageRepositor.remove(key: 'userId').then((value) {
           Navigator.pop(context);
           Navigator.pushReplacement(
             context,

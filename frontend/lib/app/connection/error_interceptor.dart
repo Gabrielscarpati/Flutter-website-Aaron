@@ -47,7 +47,7 @@ class ErrorInterceptor extends Interceptor {
   }
 
   _logOff() async {
-    await Storage.tokenStorage.delete(key: 'userId');
+    await StorageRepositor.remove(key: 'userId');
 
     navigatorKey.currentState?.pushReplacement(MaterialPageRoute(
       builder: (context) => const LoginPage(),
@@ -56,8 +56,8 @@ class ErrorInterceptor extends Interceptor {
 
   Future<dynamic> _refreshToken(RequestOptions requestOptions) async {
     //Atualiza o token
-    final oldTokens = await Storage.tokenStorage.read(key: 'userId');
-    if (oldTokens != null) {
+    final oldTokens = await StorageRepositor.getId(key: 'userId');
+    if (oldTokens.isNotEmpty) {
       final tokens = jsonDecode(oldTokens);
       final result = await ApiConnection.instance.post(
         path: _constants.refreshToken,
@@ -67,8 +67,7 @@ class ErrorInterceptor extends Interceptor {
       );
       final newTokens = result['response'];
 
-      await Storage.tokenStorage
-          .write(key: 'userId', value: jsonEncode(newTokens));
+      await StorageRepositor.save(key: 'userId', value: jsonEncode(newTokens));
       requestOptions = requestOptions.copyWith(
         headers: {
           'x-access-token': newTokens['token'],

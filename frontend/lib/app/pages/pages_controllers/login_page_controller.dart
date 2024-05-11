@@ -33,7 +33,7 @@ class LoginPageController {
         data: data,
       );
 
-      await Storage.tokenStorage.write(
+      await StorageRepositor.save(
         key: 'userId',
         value: jsonEncode({
           'token': response.data['response']['token'],

@@ -8,8 +8,8 @@ class AuthInterceptor extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = await Storage.tokenStorage.read(key: 'userId');
-    if (token != null) {
+    final token = await StorageRepositor.getId(key: 'userId');
+    if (token.isNotEmpty) {
       options.headers['x-access-token'] = jsonDecode(token)['token'];
     }
     return handler.next(options);
