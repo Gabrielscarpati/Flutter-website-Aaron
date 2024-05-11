@@ -2,12 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter_website_aaron/app/connection/error_interceptor.dart';
 
 import 'auth_interceptor.dart';
-import 'dart:html';
 
 class ApiConnection {
   String getApiUrl() {
-    var uri = Uri.parse(window.location.href);
-    return "${uri.scheme}://${uri.host}/api/";
+    return "http://stage.evedi.io/api/";
   }
 
   late final String _url = getApiUrl();

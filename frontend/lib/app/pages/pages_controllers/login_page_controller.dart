@@ -43,6 +43,7 @@ class LoginPageController {
 
       return null;
     } catch (_) {
+      print(_);
       return 'Invalid credentials!';
     }
   }
