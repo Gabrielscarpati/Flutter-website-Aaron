@@ -13,6 +13,7 @@ services:
     command: ["nginx", "-g", "daemon off;"]
 
   edi_dash_api:
+    container_name: edi_dash_api
     build:
       context: ./edi_dash_api
       dockerfile: Dockerfile
