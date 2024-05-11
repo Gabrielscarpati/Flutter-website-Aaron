@@ -2,6 +2,7 @@ version: '3'
 
 services:
   flutter_web:
+    container_name: flutter_web
     image: nginx:alpine
     ports:
       - "8080:8080"
