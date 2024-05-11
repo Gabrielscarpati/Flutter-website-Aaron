@@ -7,7 +7,7 @@ import 'dart:html';
 class ApiConnection {
   String getApiUrl() {
     var uri = Uri.parse(window.location.href);
-    return "${uri.scheme}://${uri.host}/api";
+    return "${uri.scheme}://${uri.host}/api/";
   }
 
   late final String _url = getApiUrl();
