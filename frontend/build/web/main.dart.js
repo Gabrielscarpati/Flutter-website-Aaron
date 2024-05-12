@@ -94611,7 +94611,7 @@ D(a){var s=null,r=this.d
 return A.QE(s,s,A.hf(A.a([new A.Ds(r,B.V5,new A.aqX(this),new A.aiG(B.Ph,B.Pg,new A.aqY()),new A.aiJ(s,new A.aiI(B.em,B.oQ,s,s,B.mX,s,s),B.I3,B.I2),s),A.MO(B.V3[r],1)],t.p),B.T,B.D,B.O,s))},
 aiN(){var s=this.c
 s.toString
-A.az_(!0,new A.aqV(new A.pJ("Sair","Tem certeza que deseja sair do aplicativo?",new A.aqW(this),"Sair",!0,null)),s,t.z)}}
+A.az_(!0,new A.aqV(new A.pJ("Exit","Are you sure you want to exit the app?",new A.aqW(this),"exit",!0,null)),s,t.z)}}
 A.aqS.prototype={
 $0(){this.a.d=this.b},
 $S:0}
