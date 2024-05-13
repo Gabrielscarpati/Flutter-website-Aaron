@@ -5,7 +5,7 @@ import 'auth_interceptor.dart';
 
 class ApiConnection {
   String getApiUrl() {
-    return "http://localhost/api/";
+    return "http://stage.evedi.io/api/";
   }
 
   late final String _url = getApiUrl();
