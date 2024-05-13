@@ -1,6 +1,6 @@
-import {
+const {
   select
-} from "../databases/bd_controller";
+} = require("../databases/bd_controller");
 
 class SellersController {
   async selectSales() {
@@ -12,4 +12,4 @@ class SellersController {
   }
 }
 
-export default SellersController;
+module.exports = SellersController;
