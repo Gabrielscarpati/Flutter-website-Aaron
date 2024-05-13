@@ -94443,7 +94443,7 @@ return A.ia(new A.bL(B.NY,A.bf(s,A.cM(A.a([A.cf("Loading...",s,s,s,s,s,s,s,A.ec(
 A.a2z.prototype={
 gHb(){var s=this.a
 if(s===$){s!==$&&A.an()
-s=this.a="http://localhost/api/"}return s},
+s=this.a="http://stage.evedi.io/api/"}return s},
 lP(a,b){return this.a_z(0,b)},
 a_z(a,b){var s=0,r=A.R(t.a),q,p=this,o
 var $async$lP=A.S(function(c,d){if(c===1)return A.O(d,r)
