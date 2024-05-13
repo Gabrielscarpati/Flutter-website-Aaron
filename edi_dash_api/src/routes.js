@@ -2,7 +2,7 @@ const {
   Router
 } = require("express");
 const Tools = require("./shared/Tools");
-const SellersController = require("./controllers/buyers_controller");
+const SellersController = require("./controllers/sales_controller");
 const BuyersController = require("./controllers/buyers_controller");
 const QueuesController = require("./controllers/queues_controller");
 const LogsController = require("./controllers/logs_controller");
@@ -23,9 +23,9 @@ const router = Router()
       version: "1.0.2"
     });
   })
-  .get('/sellers', Tools.verifyJWT, async function (req, res) {
+  .get('/sales', Tools.verifyJWT, async function (req, res) {
     return await Tools.bodyDefault(req, res, async function () {
-      return await sellersController.selectAll();
+      return await sellersController.selectSales();
     });
   })
   .get('/buyers', Tools.verifyJWT, async function (req, res) {

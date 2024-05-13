@@ -6,8 +6,8 @@ class Seller implements IModel {
   final String contactName;
   final String phone;
   final String state;
-  final String tradingPartners;
-  final String removed;
+  final int tradingPartners;
+  final int removed;
 
   Seller(
       {required this.seller,
@@ -21,10 +21,10 @@ class Seller implements IModel {
   Map<String, dynamic> toJson() {
     return {
       'seller': seller,
-      'contactName': contactName,
+      'contact_name': contactName,
       'phone': phone,
       'state': state,
-      'tradingPartners': tradingPartners,
+      'trading_partners': tradingPartners,
       'removed': removed,
     };
   }
@@ -32,11 +32,11 @@ class Seller implements IModel {
   factory Seller.fromJson(Map<String, dynamic> json) {
     return Seller(
       seller: json['name'] ?? '',
-      contactName: json['name'] ?? '',
+      contactName: json['contact_name'] ?? '',
       phone: json['phone'] ?? '',
-      removed: json['phone'] ?? '',
+      removed: json['removed'] ?? '',
       state: json['state'] ?? '',
-      tradingPartners: json['phone'] ?? '',
+      tradingPartners: json['trading_partners'] ?? '',
     );
   }
 }

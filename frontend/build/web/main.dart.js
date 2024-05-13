@@ -94443,7 +94443,7 @@ return A.ia(new A.bL(B.NY,A.bf(s,A.cM(A.a([A.cf("Loading...",s,s,s,s,s,s,s,A.ec(
 A.a2z.prototype={
 gHb(){var s=this.a
 if(s===$){s!==$&&A.an()
-s=this.a="http://stage.evedi.io/api/"}return s},
+s=this.a="http://localhost/api/"}return s},
 lP(a,b){return this.a_z(0,b)},
 a_z(a,b){var s=0,r=A.R(t.a),q,p=this,o
 var $async$lP=A.S(function(c,d){if(c===1)return A.O(d,r)
@@ -94598,7 +94598,7 @@ dC(){var s=this
 return A.e(["id",s.a,"parent_id",s.b,"task",s.c,"start",s.d,"end",s.e],t.N,t.z)}}
 A.eS.prototype={
 dC(){var s=this
-return A.e(["seller",s.a,"contactName",s.b,"phone",s.c,"state",s.d,"tradingPartners",s.e,"removed",s.f],t.N,t.z)}}
+return A.e(["seller",s.a,"contact_name",s.b,"phone",s.c,"state",s.d,"trading_partners",s.e,"removed",s.f],t.N,t.z)}}
 A.oA.prototype={
 dC(){var s=this
 return A.e(["date",s.a,"customer",s.b,"id",s.c,"description",s.d],t.N,t.z)}}
@@ -94785,18 +94785,18 @@ break
 case 1:return A.P(q,r)}})
 return A.Q($async$x8,r)}}
 A.acV.prototype={
-$1(a){var s,r,q,p,o="phone",n=J.aG(a),m=n.i(a,"name")
-if(m==null)m=""
-s=n.i(a,"name")
+$1(a){var s,r,q,p,o=J.aG(a),n=o.i(a,"name")
+if(n==null)n=""
+s=o.i(a,"contact_name")
 if(s==null)s=""
-r=n.i(a,o)
+r=o.i(a,"phone")
 if(r==null)r=""
-q=n.i(a,o)
+q=o.i(a,"removed")
 if(q==null)q=""
-p=n.i(a,"state")
+p=o.i(a,"state")
 if(p==null)p=""
-n=n.i(a,o)
-return new A.eS(m,s,r,p,n==null?"":n,q)},
+o=o.i(a,"trading_partners")
+return new A.eS(n,s,r,p,o==null?"":o,q)},
 $S:568}
 A.ale.prototype={
 x5(){var s=0,r=A.R(t.vb),q,p,o,n,m
