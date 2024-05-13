@@ -2,7 +2,7 @@ const {
   Router
 } = require("express");
 const Tools = require("./shared/Tools");
-const SellersController = require("./controllers/sales_controller");
+const SellersController = require("./controllers/sellers_controller");
 const BuyersController = require("./controllers/buyers_controller");
 const QueuesController = require("./controllers/queues_controller");
 const LogsController = require("./controllers/logs_controller");
