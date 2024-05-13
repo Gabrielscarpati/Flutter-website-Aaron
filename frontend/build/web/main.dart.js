@@ -94777,7 +94777,7 @@ o=J
 n=t._
 m=J
 s=3
-return A.T((p==null?$.hz=A.tp():p).lP(0,"sellers"),$async$x8)
+return A.T((p==null?$.hz=A.tp():p).lP(0,"sales"),$async$x8)
 case 3:p=o.j0(n.a(m.b4(b,"response")),new A.acV(),t.Q8)
 q=A.a9(p,!0,A.o(p).h("ay.E"))
 s=1
