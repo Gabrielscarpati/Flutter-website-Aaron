@@ -2,13 +2,12 @@ name: Atualizar README com Alterações
 
 on:
   push:
-    branches: 
+    branches:
       - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout do repositorio
         uses: actions/checkout@v1
@@ -19,19 +18,19 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY_DEV }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H stage.evedi.io >> ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@stage.evedi.io "echo 'SSH setup successfully'"
         env:
-          SERVER_SSH_KEY_DEV: ${{ secrets.SERVER_SSH_KEY_DEV }}
+          SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
 
       - name: Deploy to server
         run: |
           ssh -i ~/.ssh/id_rsa bitnami@stage.evedi.io << EOF
-            cd docker-server-geosis
-            git pull
-            sudo docker-compose build node
-            sudo docker-compose up -d --no-deps --force-recreate node
+            cd ..
+            cd Flutter-website-Aaron
+            sudo git pull
+            sudo docker-compose up --build -d
             exit
           EOF
