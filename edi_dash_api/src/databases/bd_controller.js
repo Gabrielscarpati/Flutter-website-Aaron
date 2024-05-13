@@ -3,7 +3,8 @@ const util = require('util');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const pool = mysql.createConnection({
+const pool = mysql.createPool({
+  connectionLimit: 10,  // O número de conexões máximas que o pool pode ter
   host: process.env.HOST,
   user: process.env.USER_DB,
   port: process.env.DB_PORT,
@@ -11,10 +12,20 @@ const pool = mysql.createConnection({
   database: process.env.DATABASE
 });
 
-pool.connect(function (err) {
-  if (err) throw err;
-});
 pool.query = util.promisify(pool.query);
+
+pool.on('connection', function (connection) {
+  console.log('DB Connection established');
+});
+
+pool.on('error', function (err) {
+  console.error('DB error', err);
+  if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+    console.error('DB connection was closed.');
+  } else {
+    throw err;
+  }
+});
 
 // Função para execução de consultas genéricas
 const querySQL = async (text, params) => {
@@ -22,9 +33,12 @@ const querySQL = async (text, params) => {
     const result = await pool.query(text, params);
     return result;
   } catch (error) {
+    console.error('Query error', error);
     throw error;
   }
 };
+
+// Restante do seu código...
 
 class QueryBuilder {
   constructor(table) {
