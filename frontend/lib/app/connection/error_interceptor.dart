@@ -26,7 +26,7 @@ class ErrorInterceptor extends Interceptor {
       final statusCode = err.response?.statusCode ?? 0;
 
       if (statusCode == 403) {
-        _logOff();
+        _logOut();
       } else if (statusCode == 401) {
         try {
           _lockAuthInterceptor = true;
@@ -37,7 +37,7 @@ class ErrorInterceptor extends Interceptor {
           _lockAuthInterceptor = false;
           return handler.resolve(response);
         } catch (error) {
-          _logOff();
+          _logOut();
         }
       }
     }
@@ -46,7 +46,7 @@ class ErrorInterceptor extends Interceptor {
     return handler.next(err);
   }
 
-  _logOff() async {
+  _logOut() async {
     await StorageRepositor.remove(key: 'userId');
 
     navigatorKey.currentState?.pushReplacement(MaterialPageRoute(

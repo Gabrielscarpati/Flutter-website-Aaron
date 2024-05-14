@@ -34,6 +34,11 @@ class LoginPageController {
       );
 
       await StorageRepositor.save(
+        key: 'currentUser',
+        value: jsonEncode(response.data['response']['user']),
+      );
+
+      await StorageRepositor.save(
         key: 'userId',
         value: jsonEncode({
           'token': response.data['response']['token'],
@@ -42,8 +47,8 @@ class LoginPageController {
       );
 
       return null;
-    } catch (_) {
-      print(_);
+    } catch (e) {
+      debugPrint('$e');
       return 'Invalid credentials!';
     }
   }

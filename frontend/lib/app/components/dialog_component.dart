@@ -32,7 +32,7 @@ class _DialogComponentState extends State<DialogComponent> {
       shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20)),
       actions: [
         ButtonComponent(
-          text: 'Cancelar',
+          text: 'Abort',
           isBack: true,
           onTap: () async => Navigator.pop(context),
         ),

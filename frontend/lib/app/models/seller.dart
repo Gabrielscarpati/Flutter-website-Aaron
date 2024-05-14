@@ -1,16 +1,14 @@
 import 'package:flutter_website_aaron/app/framework/imodel.dart';
 
 class Seller implements IModel {
-  final String seller;
-  final String contactName;
+  final String name;
   final String phone;
   final String state;
   final int tradingPartners;
   final int removed;
 
   Seller(
-      {required this.seller,
-      required this.contactName,
+      {required this.name,
       required this.phone,
       required this.state,
       required this.tradingPartners,
@@ -19,8 +17,7 @@ class Seller implements IModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'seller': seller,
-      'contact_name': contactName,
+      'name': name,
       'phone': phone,
       'state': state,
       'trading_partners': tradingPartners,
@@ -30,12 +27,11 @@ class Seller implements IModel {
 
   factory Seller.fromJson(Map<String, dynamic> json) {
     return Seller(
-      seller: json['name'] ?? '',
-      contactName: json['contact_name'] ?? '',
+      name: json['name'] ?? '',
       phone: json['phone'] ?? '',
-      removed: json['removed'] ?? '',
       state: json['state'] ?? '',
-      tradingPartners: json['trading_partners'] ?? '',
+      tradingPartners: json['trading_partners'] ?? 0,
+      removed: json['removed'] ?? 0,
     );
   }
 }

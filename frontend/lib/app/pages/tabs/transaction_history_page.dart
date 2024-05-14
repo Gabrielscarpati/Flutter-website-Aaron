@@ -213,15 +213,6 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                               fontWeight: FontWeight.w600,
                                               fontSize: 14),
                                         )),
-                                        const DataColumn(
-                                            label: Center(
-                                          child: Text(
-                                            '997',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 14),
-                                          ),
-                                        )),
                                       ],
                                     )),
                               )

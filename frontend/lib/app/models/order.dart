@@ -5,25 +5,24 @@ class Order implements IModel {
   final int id;
   final int parentId;
   final String task;
-  final String start;
+  final String beginDte;
   final String end;
 
   Order({
     required this.id,
     required this.parentId,
     required this.task,
-    required this.start,
+    required this.beginDte,
     required this.end,
   });
 
   @override
   Map<String, dynamic> toJson() {
     return {
+      'begin_dte': beginDte,
       'id': id,
-      'parent_id': parentId,
       'task': task,
-      'start': start,
-      'end': end,
+      'parent_id': parentId,
     };
   }
 
@@ -32,13 +31,13 @@ class Order implements IModel {
       id: json['id'] ?? '',
       parentId: json['parent_id'] ?? '',
       task: json['task'] ?? '',
-      start: DateTime.tryParse(json['start'].toString()) != null
+      beginDte: DateTime.tryParse(json['begin_dte'].toString()) != null
           ? DateFormat('MM/dd/yyyy')
               .add_jm()
-              .format(DateTime.parse(json['start']))
+              .format(DateTime.parse(json['begin_dte']))
           : DateFormat('MM/dd/yyyy')
               .add_jm()
-              .format(DateTime.parse(json['start'])),
+              .format(DateTime.parse(json['begin_dte'])),
       end: DateTime.tryParse(json['end'].toString()) != null
           ? DateFormat('MM/dd/yyyy')
               .add_jm()

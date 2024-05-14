@@ -9,7 +9,8 @@ class AppConstants {
   }
 
   //tables
-  final String sales = 'sales';
+  final String sellersDetails = 'sellers/details';
+  final String sellers = 'sellers';
   final String buyers = 'buyers';
   final String queues = 'queues';
 

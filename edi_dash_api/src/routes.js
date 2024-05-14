@@ -16,21 +16,26 @@ const logsController = new LogsController();
 const autenticationController = new AuthenticationController();
 
 const router = Router()
-  .get('/', function (req, res) {
+  .get('/', function (_req, res) {
     return res.json({
       response: "ok",
       date: new Date().toGMTString(),
       version: "1.0.2"
     });
   })
-  .get('/sales', Tools.verifyJWT, async function (req, res) {
+  .get('/sellers', Tools.verifyJWT, async function (req, res) {
     return await Tools.bodyDefault(req, res, async function () {
-      return await sellersController.selectSales();
+      return await sellersController.selectAll(req.query.id);
+    });
+  })
+  .get('/sellers/details', Tools.verifyJWT, async function (req, res) {
+    return await Tools.bodyDefault(req, res, async function () {
+      return await sellersController.selectSellerDetails();
     });
   })
   .get('/buyers', Tools.verifyJWT, async function (req, res) {
     return await Tools.bodyDefault(req, res, async function () {
-      const result = await buyersController.selectAll();
+      const result = await buyersController.selectAll(req.query.seller_id);
       return result;
     });
   })
