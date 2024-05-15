@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_website_aaron/app/framework/imodel.dart';
 
-DataRow recentFileDataRow(IModel data) {
+DataRow recentFileDataRow(IModel data, {void Function()? onTap}) {
   var cells = data.toJson().entries.map((e) {
     if (e.value is bool) {
       return DataCell(
@@ -11,5 +11,17 @@ DataRow recentFileDataRow(IModel data) {
     }
   }).toList();
 
-  return DataRow(cells: cells);
+  if (onTap != null) {
+    return DataRow(
+        cells: cells,
+        onSelectChanged: (tapped) {
+          if (tapped != null && tapped) {
+            onTap.call();
+          }
+        });
+  }
+
+  return DataRow(
+    cells: cells,
+  );
 }

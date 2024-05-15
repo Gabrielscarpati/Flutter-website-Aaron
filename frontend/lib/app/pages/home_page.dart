@@ -87,40 +87,61 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppComponents.appBar(const Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Text(
+            AppNames.appName,
+            style: TextStyle(
+                fontSize: Fonts.titleShortcuts, color: AppColors.whiteColor),
+            textAlign: TextAlign.center,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Icon(
+              Icons.dashboard,
+              color: AppColors.whiteColor,
+            ),
+          )
+        ],
+      )),
       body: _isLoading
           ? const LoadingComponent()
-          : Row(
-              children: [
-                SideNavigationBar(
-                  selectedIndex: _selectedIndex,
-                  items: _views,
-                  onTap: (index) {
-                    if ((_views.length < 4 && index == 2) || index == 3) {
-                      _showLogoutDialog();
-                      return;
-                    }
+          : Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                children: [
+                  SideNavigationBar(
+                    selectedIndex: _selectedIndex,
+                    items: _views,
+                    onTap: (index) {
+                      if ((_views.length < 4 && index == 2) || index == 3) {
+                        _showLogoutDialog();
+                        return;
+                      }
 
-                    _onItemTapped(index);
-                  },
-                  theme: SideNavigationBarTheme(
-                    togglerTheme: SideNavigationBarTogglerTheme.standard(),
-                    itemTheme: SideNavigationBarItemTheme(
-                      selectedItemColor: AppColors.primaryColor,
-                      unselectedItemColor: Colors.grey,
+                      _onItemTapped(index);
+                    },
+                    theme: SideNavigationBarTheme(
+                      togglerTheme: SideNavigationBarTogglerTheme.standard(),
+                      itemTheme: SideNavigationBarItemTheme(
+                        selectedItemColor: AppColors.primaryColor,
+                        unselectedItemColor: Colors.grey,
+                      ),
+                      dividerTheme: SideNavigationBarDividerTheme.standard(),
                     ),
-                    dividerTheme: SideNavigationBarDividerTheme.standard(),
+                    toggler: SideBarToggler(
+                        expandIcon: Icons.keyboard_arrow_right,
+                        shrinkIcon: Icons.keyboard_arrow_left,
+                        onToggle: () {
+                          debugPrint('Toggle');
+                        }),
                   ),
-                  toggler: SideBarToggler(
-                      expandIcon: Icons.keyboard_arrow_right,
-                      shrinkIcon: Icons.keyboard_arrow_left,
-                      onToggle: () {
-                        debugPrint('Toggle');
-                      }),
-                ),
-                Expanded(
-                  child: _widgetOptions.elementAt(_selectedIndex),
-                )
-              ],
+                  Expanded(
+                    child: _widgetOptions.elementAt(_selectedIndex),
+                  )
+                ],
+              ),
             ),
     );
   }
@@ -129,7 +150,7 @@ class _HomePageState extends State<HomePage> {
     // set up the AlertDialog
     final dialog = DialogComponent(
       title: 'Logout',
-      content: 'Are you sure you want to exit the app?',
+      content: const Text('Are you sure you want to exit the app?'),
       onConfirm: () {
         StorageRepositor.remove(key: 'userId').then((value) {
           Navigator.pop(context);

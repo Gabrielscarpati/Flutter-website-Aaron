@@ -1,6 +1,7 @@
 import 'package:flutter_website_aaron/app/models/order.dart';
 import 'package:flutter_website_aaron/app/models/log.dart';
 import 'package:flutter_website_aaron/app/shared/app_constants.dart';
+import 'package:flutter_website_aaron/app/shared/user_controller.dart';
 
 import '../../../connection/api_connection.dart';
 
@@ -15,9 +16,22 @@ class TransactionHistoryPageController {
   }
 
   final constants = AppConstants.instance;
+  final _userController = UserController.instance;
 
   Future<List<Order>> getOrders() async {
-    final result = await ApiConnection.instance.get(path: constants.queues);
+    final currentUser = await _userController.getCurrentUser();
+    Map<String, dynamic> result = <String, dynamic>{};
+    if (currentUser.sellerId == 0) {
+      result = await ApiConnection.instance.get(path: constants.queues);
+    } else {
+      result = await ApiConnection.instance.get(
+        path: constants.queues,
+        queryParameters: {
+          'seller_id': currentUser.sellerId,
+        },
+      );
+    }
+
     final response = result['response'] as List;
     final list = response.map((e) => Order.fromJson(e)).toList();
     return list;

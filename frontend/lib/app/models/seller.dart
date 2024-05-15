@@ -1,6 +1,7 @@
 import 'package:flutter_website_aaron/app/framework/imodel.dart';
 
 class Seller implements IModel {
+  final int id;
   final String name;
   final String phone;
   final String state;
@@ -8,7 +9,8 @@ class Seller implements IModel {
   final int removed;
 
   Seller(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.phone,
       required this.state,
       required this.tradingPartners,
@@ -27,6 +29,7 @@ class Seller implements IModel {
 
   factory Seller.fromJson(Map<String, dynamic> json) {
     return Seller(
+      id: json['id'] ?? -1,
       name: json['name'] ?? '',
       phone: json['phone'] ?? '',
       state: json['state'] ?? '',

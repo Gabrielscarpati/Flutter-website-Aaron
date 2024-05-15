@@ -18,12 +18,12 @@ class ClientsPageController {
   final constants = AppConstants.instance;
   final _userController = UserController.instance;
 
-  Future<List<Buyer>> getBuyers() async {
+  Future<List<Buyer>> getBuyers(int? sellerId) async {
     final currentUser = await _userController.getCurrentUser();
     final result = await ApiConnection.instance.get(
       path: constants.buyers,
       queryParameters: {
-        'seller_id': currentUser.sellerId,
+        'seller_id': sellerId ?? currentUser.sellerId,
       },
     );
     final response = result['response'] as List;

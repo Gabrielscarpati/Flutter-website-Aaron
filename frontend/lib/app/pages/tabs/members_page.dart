@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_website_aaron/app/components/dialog_component.dart';
 import 'package:flutter_website_aaron/app/components/loading_component.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/seller.dart';
 import 'package:flutter_website_aaron/app/pages/pages_controllers/tabs_controllers/members_page_controller.dart';
+import 'package:flutter_website_aaron/app/pages/tabs/clients_page.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 
 class MembersPage extends StatefulWidget {
@@ -42,29 +44,11 @@ class _MembersPageState extends State<MembersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppComponents.appBar(const Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          Text(
-            AppNames.appName,
-            style: TextStyle(
-                fontSize: Fonts.titleShortcuts, color: AppColors.whiteColor),
-            textAlign: TextAlign.center,
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: Icon(
-              Icons.dashboard,
-              color: AppColors.whiteColor,
-            ),
-          )
-        ],
-      )),
       body: _isLoading
           ? const LoadingComponent()
           : SingleChildScrollView(
+              padding: const EdgeInsets.only(left: 10, right: 15, top: 10),
               child: Container(
-                padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -72,15 +56,29 @@ class _MembersPageState extends State<MembersPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 10),
                     TextField(
                       controller: _searchController,
                       onChanged: (value) {
                         setState(() {
                           dataList = filterData
-                              .where((element) => element.name
-                                  .toLowerCase()
-                                  .contains(value.toLowerCase()))
+                              .where((element) =>
+                                  element.name
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()) ||
+                                  element.state
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()) ||
+                                  element.phone
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()) ||
+                                  element.tradingPartners
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()) ||
+                                  element.removed
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()))
                               .toList();
                           key.currentState!.pageTo(0);
                         });
@@ -93,7 +91,7 @@ class _MembersPageState extends State<MembersPage> {
                           borderRadius: BorderRadius.circular(8.0),
                           borderSide: BorderSide.none,
                         ),
-                        hintText: "Search for a Seller",
+                        hintText: 'Search for a seller',
                         prefixIcon: const Icon(Icons.search),
                         prefixIconColor: Colors.black,
                         suffixIcon: _searchController.text.isNotEmpty
@@ -114,68 +112,71 @@ class _MembersPageState extends State<MembersPage> {
                     SizedBox(
                       width: double.infinity,
                       child: Theme(
-                          data: ThemeData.light().copyWith(
-                              cardColor: Theme.of(context).canvasColor),
-                          child: PaginatedDataTable(
-                            key: key,
-                            sortColumnIndex: 0,
-                            sortAscending: sort,
-                            source: RowSource<Seller>(
-                              dataList: dataList,
-                              count: dataList.length,
-                            ),
-                            rowsPerPage: dataList.length > 10
-                                ? 10
-                                : dataList.isEmpty
-                                    ? 1
-                                    : dataList.length,
-                            columnSpacing: 8,
-                            columns: [
-                              DataColumn(
-                                  label: const Text(
-                                    'Seller',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14),
-                                  ),
-                                  onSort: ((columnIndex, ascending) {
-                                    setState(() {
-                                      sort = !sort;
-                                      sortColumn(columnIndex, ascending);
-                                    });
-                                  })),
-                              const DataColumn(
-                                  label: Text(
-                                'Phone',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              )),
-                              const DataColumn(
-                                  label: Text(
-                                'State',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              )),
-                              const DataColumn(
-                                  label: Center(
-                                child: Text(
-                                  'Trading Partners',
+                        data: ThemeData.light()
+                            .copyWith(cardColor: Theme.of(context).canvasColor),
+                        child: PaginatedDataTable(
+                          key: key,
+                          showCheckboxColumn: false,
+                          sortColumnIndex: 0,
+                          sortAscending: sort,
+                          source: RowSource<Seller>(
+                            dataList: dataList,
+                            count: dataList.length,
+                            onTap: (data) {
+                              _showSellerDetailsModal(data);
+                            },
+                          ),
+                          rowsPerPage: dataList.length > 10
+                              ? 10
+                              : dataList.isEmpty
+                                  ? 1
+                                  : dataList.length,
+                          columnSpacing: 8,
+                          columns: [
+                            DataColumn(
+                                label: const Text(
+                                  'Seller',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 14),
                                 ),
-                              )),
-                              const DataColumn(
-                                  label: Center(
-                                child: Text(
-                                  'Removed',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14),
-                                ),
-                              )),
-                            ],
-                          )),
+                                onSort: ((columnIndex, ascending) {
+                                  setState(() {
+                                    sort = !sort;
+                                    sortColumn(columnIndex, ascending);
+                                  });
+                                })),
+                            const DataColumn(
+                                label: Text(
+                              'Phone',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 14),
+                            )),
+                            const DataColumn(
+                                label: Text(
+                              'State',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 14),
+                            )),
+                            const DataColumn(
+                                label: Center(
+                              child: Text(
+                                'Trading Partners',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              ),
+                            )),
+                            const DataColumn(
+                                label: Center(
+                              child: Text(
+                                'Removed',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              ),
+                            )),
+                          ],
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -192,5 +193,17 @@ class _MembersPageState extends State<MembersPage> {
         _isLoading = false;
       });
     });
+  }
+
+  _showSellerDetailsModal(Seller seller) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DialogComponent(
+          title: "${seller.name} clients",
+          content: ClientsPage(sellerId: seller.id),
+        );
+      },
+    );
   }
 }

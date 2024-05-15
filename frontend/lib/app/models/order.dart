@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 class Order implements IModel {
   final int id;
+  final String sellerName;
   final int parentId;
   final String task;
   final String beginDte;
@@ -10,6 +11,7 @@ class Order implements IModel {
 
   Order({
     required this.id,
+    required this.sellerName,
     required this.parentId,
     required this.task,
     required this.beginDte,
@@ -19,6 +21,7 @@ class Order implements IModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      'name': sellerName,
       'begin_dte': beginDte,
       'id': id,
       'task': task,
@@ -29,6 +32,7 @@ class Order implements IModel {
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
       id: json['id'] ?? '',
+      sellerName: json['name'] ?? '',
       parentId: json['parent_id'] ?? '',
       task: json['task'] ?? '',
       beginDte: DateTime.tryParse(json['begin_dte'].toString()) != null

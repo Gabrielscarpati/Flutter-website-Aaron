@@ -4,17 +4,17 @@ import 'button_component.dart';
 
 class DialogComponent extends StatefulWidget {
   final String title;
-  final String content;
-  final void Function() onConfirm;
-  final String buttonConfirmText;
+  final Widget content;
+  final void Function()? onConfirm;
+  final String? buttonConfirmText;
   final bool? isExitButton;
 
   const DialogComponent({
     super.key,
     required this.title,
     required this.content,
-    required this.onConfirm,
-    required this.buttonConfirmText,
+    this.onConfirm,
+    this.buttonConfirmText,
     this.isExitButton,
   });
 
@@ -27,22 +27,32 @@ class _DialogComponentState extends State<DialogComponent> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(widget.title),
-      content: Text(widget.content),
+      content: Container(
+        constraints: (widget.content is StatefulWidget)
+            ? BoxConstraints(
+                minWidth: MediaQuery.of(context).size.width -
+                    (MediaQuery.of(context).size.width / 5),
+              )
+            : null,
+        child: widget.content,
+      ),
       surfaceTintColor: Colors.transparent,
       shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20)),
       actions: [
         ButtonComponent(
-          text: 'Abort',
+          text: 'Dismiss',
           isBack: true,
           onTap: () async => Navigator.pop(context),
         ),
-        ButtonComponent(
-          text: widget.buttonConfirmText,
-          onTap: () async {
-            widget.onConfirm.call();
-          },
-          isExit: widget.isExitButton,
-        ),
+        widget.onConfirm != null
+            ? ButtonComponent(
+                text: widget.buttonConfirmText ?? 'Confirm',
+                onTap: () async {
+                  widget.onConfirm!.call();
+                },
+                isExit: widget.isExitButton,
+              )
+            : const SizedBox(),
       ],
     );
   }

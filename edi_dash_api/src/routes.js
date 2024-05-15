@@ -84,7 +84,7 @@ const router = Router()
   })
   .get('/queues', Tools.verifyJWT, async function (req, res) {
     return await Tools.bodyDefault(req, res, async function () {
-      const result = await queuesController.selectAll();
+      const result = await queuesController.selectAll(req.query.seller_id);
       return result;
     });
   })
