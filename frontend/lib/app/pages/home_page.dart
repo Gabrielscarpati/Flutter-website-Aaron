@@ -66,7 +66,9 @@ class _HomePageState extends State<HomePage> {
       );
       _views.addAll(_defaultViews);
       _widgetOptions.addAll(_defaultWidgetOptions);
-      _isLoading = false;
+      if (currentUser.id != -1) {
+        _isLoading = false;
+      }
     });
   }
 

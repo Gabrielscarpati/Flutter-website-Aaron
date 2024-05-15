@@ -35,6 +35,10 @@ class UserController {
 
   Future<User> _getCurrentUserModel() async {
     final currentUser = await StorageRepositor.getId(key: 'currentUser');
-    return User.fromJson(jsonDecode(currentUser));
+    if (currentUser.isNotEmpty) {
+      return User.fromJson(jsonDecode(currentUser));
+    }
+
+    return User.empty();
   }
 }
