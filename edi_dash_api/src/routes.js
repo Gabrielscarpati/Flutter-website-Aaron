@@ -88,9 +88,9 @@ const router = Router()
       return result;
     });
   })
-  .get('/logs/error', Tools.verifyJWT, async function (req, res) {
+  .get('/logs', Tools.verifyJWT, async function (req, res) {
     return await Tools.bodyDefault(req, res, async function () {
-      const result = await logsController.selectErrors();
+      const result = await logsController.selectAll(req.query.queue_id);
       return result;
     });
   });

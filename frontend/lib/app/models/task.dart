@@ -1,18 +1,18 @@
 import 'package:flutter_website_aaron/app/framework/imodel.dart';
 import 'package:intl/intl.dart';
 
-class Order implements IModel {
+class Task implements IModel {
   final int id;
   final String sellerName;
   final int sandbox;
-  final String task;
+  final String description;
   final String expDte;
 
-  Order({
+  Task({
     required this.id,
     required this.sellerName,
     required this.sandbox,
-    required this.task,
+    required this.description,
     required this.expDte,
   });
 
@@ -23,7 +23,7 @@ class Order implements IModel {
         'name': sellerName,
         'exp_dte': expDte,
         'id': id,
-        'task': task,
+        'task': description,
         'sandbox': sandbox,
       };
     }
@@ -31,13 +31,13 @@ class Order implements IModel {
     return {
       'exp_dte': expDte,
       'id': id,
-      'task': task,
+      'task': description,
       'sandbox': sandbox,
     };
   }
 
-  factory Order.fromJson(Map<String, dynamic> json) {
-    return Order(
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return Task(
       sellerName: json['name'] ?? '',
       expDte: DateTime.tryParse(json['exp_dte'].toString()) != null
           ? DateFormat('MM/dd/yyyy')
@@ -47,7 +47,7 @@ class Order implements IModel {
               .add_jm()
               .format(DateTime.parse(json['exp_dte'])),
       id: json['id'] ?? '',
-      task: json['task'] ?? '',
+      description: json['task'] ?? '',
       sandbox: json['sandbox'] ?? -1,
     );
   }

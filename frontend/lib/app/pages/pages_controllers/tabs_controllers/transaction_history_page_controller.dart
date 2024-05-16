@@ -1,4 +1,4 @@
-import 'package:flutter_website_aaron/app/models/order.dart';
+import 'package:flutter_website_aaron/app/models/task.dart';
 import 'package:flutter_website_aaron/app/models/log.dart';
 import 'package:flutter_website_aaron/app/shared/app_constants.dart';
 import 'package:flutter_website_aaron/app/shared/user_controller.dart';
@@ -18,7 +18,7 @@ class TransactionHistoryPageController {
   final constants = AppConstants.instance;
   final _userController = UserController.instance;
 
-  Future<List<Order>> getOrders() async {
+  Future<List<Task>> getTasks() async {
     final currentUser = await _userController.getCurrentUser();
 
     Map<String, dynamic> result = <String, dynamic>{};
@@ -34,7 +34,7 @@ class TransactionHistoryPageController {
     }
 
     final response = result['response'] as List;
-    final list = response.map((e) => Order.fromJson(e)).toList();
+    final list = response.map((e) => Task.fromJson(e)).toList();
     return list;
   }
 

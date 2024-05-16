@@ -2,15 +2,17 @@ import 'package:flutter_website_aaron/app/framework/imodel.dart';
 import 'package:intl/intl.dart';
 
 class Log extends IModel {
-  final String date;
-  final String taskDescription;
   final int id;
+  final int taskId;
+  final String taskDescription;
+  final String date;
   final String error;
 
   Log({
-    required this.date,
-    required this.taskDescription,
     required this.id,
+    required this.taskId,
+    required this.taskDescription,
+    required this.date,
     required this.error,
   });
 
@@ -36,6 +38,7 @@ class Log extends IModel {
       taskDescription: json['message'],
       id: json['id'] ?? '',
       error: json['category'] ?? '',
+      taskId: json['task_id'] ?? '',
     );
   }
 }

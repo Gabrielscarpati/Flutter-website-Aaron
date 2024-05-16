@@ -15,7 +15,7 @@ class AppConstants {
   final String queues = 'queues';
 
   //error log tables
-  final String logs = 'logs/error';
+  final String logs = 'logs';
 
   //authentication
   final String login = 'login';

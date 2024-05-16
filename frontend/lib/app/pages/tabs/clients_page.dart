@@ -272,7 +272,7 @@ class _ClientsPageState extends State<ClientsPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 5),
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 15),
           decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
             borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -290,10 +290,9 @@ class _ClientsPageState extends State<ClientsPage> {
                 source: RowSource<Warning>(
                   dataList: warnings,
                   count: warnings.length,
-                  onTap: (data) {},
                 ),
-                rowsPerPage: warnings.length > 10
-                    ? 10
+                rowsPerPage: warnings.length > 8
+                    ? 8
                     : warnings.isEmpty
                         ? 1
                         : warnings.length,

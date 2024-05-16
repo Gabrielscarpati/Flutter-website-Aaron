@@ -167,7 +167,7 @@
         }
       }
     },
-    "/logs/error": {
+    "/logs": {
       "get": {
         "description": "",
         "parameters": [
