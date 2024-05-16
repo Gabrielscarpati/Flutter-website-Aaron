@@ -158,14 +158,14 @@ class _HomePageState extends State<HomePage> {
         StorageRepositor.remove(key: 'currentUser').then((_) {
           StorageRepositor.remove(key: 'userId').then((_) {
             Navigator.pop(context);
-            setState(() {
-              _isLoading = false;
-            });
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const LoginPage()),
             );
           });
+        });
+        setState(() {
+          _isLoading = false;
         });
       },
       buttonConfirmText: 'Exit',
