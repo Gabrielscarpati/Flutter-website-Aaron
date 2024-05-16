@@ -152,9 +152,15 @@ class _HomePageState extends State<HomePage> {
       title: 'Logout',
       content: const Text('Are you sure you want to exit the app?'),
       onConfirm: () {
+        setState(() {
+          _isLoading = true;
+        });
         StorageRepositor.remove(key: 'currentUser').then((_) {
           StorageRepositor.remove(key: 'userId').then((_) {
             Navigator.pop(context);
+            setState(() {
+              _isLoading = false;
+            });
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const LoginPage()),
