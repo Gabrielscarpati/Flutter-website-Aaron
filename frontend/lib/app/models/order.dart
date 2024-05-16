@@ -4,18 +4,16 @@ import 'package:intl/intl.dart';
 class Order implements IModel {
   final int id;
   final String sellerName;
-  final int parentId;
+  final int sandbox;
   final String task;
-  final String beginDte;
-  final String end;
+  final String expDte;
 
   Order({
     required this.id,
     required this.sellerName,
-    required this.parentId,
+    required this.sandbox,
     required this.task,
-    required this.beginDte,
-    required this.end,
+    required this.expDte,
   });
 
   @override
@@ -23,41 +21,34 @@ class Order implements IModel {
     if (sellerName.isNotEmpty) {
       return {
         'name': sellerName,
-        'begin_dte': beginDte,
+        'exp_dte': expDte,
         'id': id,
         'task': task,
-        'parent_id': parentId,
+        'sandbox': sandbox,
       };
     }
 
     return {
-      'begin_dte': beginDte,
+      'exp_dte': expDte,
       'id': id,
       'task': task,
-      'parent_id': parentId,
+      'sandbox': sandbox,
     };
   }
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      id: json['id'] ?? '',
       sellerName: json['name'] ?? '',
-      parentId: json['parent_id'] ?? '',
+      expDte: DateTime.tryParse(json['exp_dte'].toString()) != null
+          ? DateFormat('MM/dd/yyyy')
+              .add_jm()
+              .format(DateTime.parse(json['exp_dte']))
+          : DateFormat('MM/dd/yyyy')
+              .add_jm()
+              .format(DateTime.parse(json['exp_dte'])),
+      id: json['id'] ?? '',
       task: json['task'] ?? '',
-      beginDte: DateTime.tryParse(json['begin_dte'].toString()) != null
-          ? DateFormat('MM/dd/yyyy')
-              .add_jm()
-              .format(DateTime.parse(json['begin_dte']))
-          : DateFormat('MM/dd/yyyy')
-              .add_jm()
-              .format(DateTime.parse(json['begin_dte'])),
-      end: DateTime.tryParse(json['end'].toString()) != null
-          ? DateFormat('MM/dd/yyyy')
-              .add_jm()
-              .format(DateTime.parse(json['end']))
-          : DateFormat('MM/dd/yyyy')
-              .add_jm()
-              .format(DateTime.parse(json['end'])),
+      sandbox: json['sandbox'] ?? -1,
     );
   }
 }

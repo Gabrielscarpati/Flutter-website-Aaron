@@ -85,7 +85,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                             .toString()
                                             .toLowerCase()
                                             .contains(value.toLowerCase()) ||
-                                        element.beginDte
+                                        element.expDte
                                             .toString()
                                             .toLowerCase()
                                             .contains(value.toLowerCase()) ||
