@@ -41,4 +41,9 @@ class UserController {
 
     return User.empty();
   }
+
+  Future<bool> currentUserIsAdmin() async {
+    final currentUser = await _getCurrentUserModel();
+    return currentUser.id == 0;
+  }
 }

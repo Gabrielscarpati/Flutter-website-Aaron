@@ -20,6 +20,7 @@ class TransactionHistoryPageController {
 
   Future<List<Order>> getOrders() async {
     final currentUser = await _userController.getCurrentUser();
+
     Map<String, dynamic> result = <String, dynamic>{};
     if (currentUser.sellerId == 0) {
       result = await ApiConnection.instance.get(path: constants.queues);

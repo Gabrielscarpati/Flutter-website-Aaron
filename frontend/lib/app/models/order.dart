@@ -20,8 +20,17 @@ class Order implements IModel {
 
   @override
   Map<String, dynamic> toJson() {
+    if (sellerName.isNotEmpty) {
+      return {
+        'name': sellerName,
+        'begin_dte': beginDte,
+        'id': id,
+        'task': task,
+        'parent_id': parentId,
+      };
+    }
+
     return {
-      'name': sellerName,
       'begin_dte': beginDte,
       'id': id,
       'task': task,

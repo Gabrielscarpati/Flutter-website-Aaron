@@ -5,6 +5,7 @@ import 'package:flutter_website_aaron/app/models/log.dart';
 import 'package:flutter_website_aaron/app/models/order.dart';
 import 'package:flutter_website_aaron/app/pages/pages_controllers/tabs_controllers/transaction_history_page_controller.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
+import 'package:flutter_website_aaron/app/shared/user_controller.dart';
 
 import '../../components/dialog_component.dart';
 
@@ -17,12 +18,14 @@ class TransactionHistoryPage extends StatefulWidget {
 
 class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   final _controller = TransactionHistoryPageController.instance;
+  final _userController = UserController.instance;
 
   List<Order> orderList = List.empty(growable: true);
   List<Log> logList = List.empty(growable: true);
   bool sort = true;
   List<Order> filterData = [];
   bool _isLoading = true;
+  bool _isAdmin = false;
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -39,9 +42,11 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   _getOrders() async {
     final orders = await _controller.getOrders();
     final logs = await _controller.getLogs();
+    final isAdmin = await _userController.currentUserIsAdmin();
 
     setState(() {
       orderList = orders;
+      _isAdmin = isAdmin;
       logList = logs;
       filterData = orders;
       _isLoading = false;
@@ -161,45 +166,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                 ? 1
                                 : orderList.length,
                         columnSpacing: 8,
-                        columns: [
-                          const DataColumn(
-                              label: Text(
-                            'Seller',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
-                          )),
-                          DataColumn(
-                            label: const Text(
-                              'Date/Time',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 14),
-                            ),
-                            onSort: ((columnIndex, ascending) {
-                              setState(() {
-                                sort = !sort;
-                                sortColumn(columnIndex, ascending);
-                              });
-                            }),
-                          ),
-                          const DataColumn(
-                              label: Text(
-                            'Order number',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
-                          )),
-                          const DataColumn(
-                              label: Text(
-                            'Document',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
-                          )),
-                          const DataColumn(
-                              label: Text(
-                            'Sent/Received',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
-                          )),
-                        ],
+                        columns: _getColumns(),
                       ),
                     ),
                   ),
@@ -284,5 +251,51 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
         );
       },
     );
+  }
+
+  _getColumns() {
+    final columns = [
+      DataColumn(
+        label: const Text(
+          'Date/Time',
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        ),
+        onSort: ((columnIndex, ascending) {
+          setState(() {
+            sort = !sort;
+            sortColumn(columnIndex, ascending);
+          });
+        }),
+      ),
+      const DataColumn(
+          label: Text(
+        'Order number',
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+      )),
+      const DataColumn(
+          label: Text(
+        'Document',
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+      )),
+      const DataColumn(
+          label: Text(
+        'Sent/Received',
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+      )),
+    ];
+
+    if (_isAdmin) {
+      columns.insert(
+        0,
+        const DataColumn(
+            label: Text(
+          'Seller',
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        )),
+      );
+      return columns;
+    }
+
+    return columns;
   }
 }
