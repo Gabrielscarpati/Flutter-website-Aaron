@@ -44,6 +44,6 @@ class UserController {
 
   Future<bool> currentUserIsAdmin() async {
     final currentUser = await _getCurrentUserModel();
-    return currentUser.id == 0;
+    return currentUser.sellerId == 0;
   }
 }
