@@ -170,8 +170,8 @@ class _ClientsPageState extends State<ClientsPage> {
                             ? (clients.length > 7
                                 ? 7
                                 : (clients.isNotEmpty ? clients.length : 1))
-                            : clients.length > 10
-                                ? 10
+                            : clients.length > 8
+                                ? 8
                                 : clients.isEmpty
                                     ? 1
                                     : clients.length,

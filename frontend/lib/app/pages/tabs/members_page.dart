@@ -126,8 +126,8 @@ class _MembersPageState extends State<MembersPage> {
                               _showSellerDetailsModal(data);
                             },
                           ),
-                          rowsPerPage: dataList.length > 10
-                              ? 10
+                          rowsPerPage: dataList.length > 8
+                              ? 8
                               : dataList.isEmpty
                                   ? 1
                                   : dataList.length,

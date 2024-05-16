@@ -160,8 +160,8 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                           dataList: orderList,
                           count: orderList.length,
                         ),
-                        rowsPerPage: orderList.length > 10
-                            ? 10
+                        rowsPerPage: orderList.length > 8
+                            ? 8
                             : orderList.isEmpty
                                 ? 1
                                 : orderList.length,
