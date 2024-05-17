@@ -291,6 +291,16 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
       )),
       const DataColumn(
           label: Text(
+        'Client id',
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+      )),
+      const DataColumn(
+          label: Text(
+        'Client name',
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+      )),
+      const DataColumn(
+          label: Text(
         'Sent/Received',
         style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
       )),
