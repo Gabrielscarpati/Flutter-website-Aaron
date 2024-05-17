@@ -94,6 +94,13 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                             .contains(value.toLowerCase()) ||
                                         element.description
                                             .toLowerCase()
+                                            .contains(value.toLowerCase()) ||
+                                        element.buyerId
+                                            .toString()
+                                            .toLowerCase()
+                                            .contains(value.toLowerCase()) ||
+                                        element.buyerName
+                                            .toLowerCase()
                                             .contains(value.toLowerCase()),
                                   )
                                   .toList();

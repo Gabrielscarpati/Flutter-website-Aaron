@@ -8,7 +8,7 @@ class Task implements IModel {
   final String description;
   final String expDte;
   final int buyerId;
-  final int buyerName;
+  final String buyerName;
 
   Task({
     required this.id,
@@ -58,7 +58,7 @@ class Task implements IModel {
       description: json['task'] ?? '',
       sandbox: json['sandbox'] ?? -1,
       buyerId: json['buyer_id'] ?? -1,
-      buyerName: json['buyer_name'] ?? -1,
+      buyerName: json['buyer_name'] ?? '',
     );
   }
 }
