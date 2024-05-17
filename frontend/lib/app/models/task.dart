@@ -7,6 +7,8 @@ class Task implements IModel {
   final int sandbox;
   final String description;
   final String expDte;
+  final int buyerId;
+  final int buyerName;
 
   Task({
     required this.id,
@@ -14,16 +16,20 @@ class Task implements IModel {
     required this.sandbox,
     required this.description,
     required this.expDte,
+    required this.buyerId,
+    required this.buyerName,
   });
 
   @override
   Map<String, dynamic> toJson() {
     if (sellerName.isNotEmpty) {
       return {
-        'name': sellerName,
+        'seller_name': sellerName,
         'exp_dte': expDte,
         'id': id,
         'task': description,
+        'buyer_id': buyerId,
+        'buyer_name': buyerName,
         'sandbox': sandbox,
       };
     }
@@ -32,13 +38,15 @@ class Task implements IModel {
       'exp_dte': expDte,
       'id': id,
       'task': description,
+      'buyer_id': buyerId,
+      'buyer_name': buyerName,
       'sandbox': sandbox,
     };
   }
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
-      sellerName: json['name'] ?? '',
+      sellerName: json['seller_name'] ?? '',
       expDte: DateTime.tryParse(json['exp_dte'].toString()) != null
           ? DateFormat('MM/dd/yyyy')
               .add_jm()
@@ -49,6 +57,8 @@ class Task implements IModel {
       id: json['id'] ?? '',
       description: json['task'] ?? '',
       sandbox: json['sandbox'] ?? -1,
+      buyerId: json['buyer_id'] ?? -1,
+      buyerName: json['buyer_name'] ?? -1,
     );
   }
 }
