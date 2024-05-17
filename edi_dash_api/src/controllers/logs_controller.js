@@ -10,7 +10,11 @@ class LogsController {
         .execute();
     }
 
-    return await select("*", "log").where("category = 'Error'").execute();
+    return await select("log.*, buyer.id as buyer_id, buyer.name as buyer_name", "log")
+      .join("queue", "queue.id = log.task_id")
+      .join("buyer", "buyer.id = queue.ukey")
+      .where("category = 'Error'")
+      .execute();
   }
 }
 

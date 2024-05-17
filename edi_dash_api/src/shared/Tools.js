@@ -1,4 +1,3 @@
-
 const jwt = require("jsonwebtoken");
 const config = require('../../config.json');
 
@@ -36,8 +35,11 @@ class Tools {
 
   static verifyJWTRefresh(req, res, next) {
     const token = req.headers['x-access-token'];
-    if (!token) return res.status(403).json({ auth: false, message: 'Invalid Token' });
-    const decoded = jwt.decode(token)
+    if (!token) return res.status(403).json({
+      auth: false,
+      message: 'Invalid Token'
+    });
+    const decoded = jwt.decode(token);
     req.user = decoded.user;
     next();
 
@@ -46,10 +48,16 @@ class Tools {
   static verifyJWT(req, res, next) {
     var secret = config.secret;
     const token = req.headers['x-access-token'];
-    if (!token) return res.status(403).json({ auth: false, message: 'Invalid Token' });
+    if (!token) return res.status(403).json({
+      auth: false,
+      message: 'Invalid Token'
+    });
 
     jwt.verify(token, secret, function (err, decoded) {
-      if (err) return res.status(401).json({ auth: false, message: 'Failed to autenticate' });
+      if (err) return res.status(401).json({
+        auth: false,
+        message: 'Failed to autenticate'
+      });
       req.user = decoded.user;
       next();
     });
@@ -66,7 +74,9 @@ class Tools {
       });
     } catch (err) {
       if (err.name === 'UnauthorizedError') {
-        return res.status(401).json({ message: 'Invalid Token' });
+        return res.status(401).json({
+          message: 'Invalid Token'
+        });
       }
       return res.status(400).send({
         message: err.message

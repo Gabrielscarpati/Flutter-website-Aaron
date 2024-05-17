@@ -7,6 +7,8 @@ class Log extends IModel {
   final String taskDescription;
   final String date;
   final String error;
+  final int buyerId;
+  final String buyerName;
 
   Log({
     required this.id,
@@ -14,6 +16,8 @@ class Log extends IModel {
     required this.taskDescription,
     required this.date,
     required this.error,
+    required this.buyerId,
+    required this.buyerName,
   });
 
   @override
@@ -22,6 +26,8 @@ class Log extends IModel {
       'date': date,
       'taskDescription': taskDescription,
       'id': id,
+      'buyer_id': buyerId,
+      'buyer_name': buyerName,
       'error': error,
     };
   }
@@ -39,6 +45,8 @@ class Log extends IModel {
       id: json['id'] ?? '',
       error: json['category'] ?? '',
       taskId: json['task_id'] ?? '',
+      buyerId: json['buyer_id'] ?? -1,
+      buyerName: json['buyer_name'] ?? '',
     );
   }
 }
