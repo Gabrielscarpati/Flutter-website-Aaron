@@ -227,7 +227,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                     controller: _logSearchController,
                     onChanged: (value) {
                       setState(() {
-                        if (logListToShow.isEmpty) {
+                        if (_logSearchController.text.isEmpty) {
                           if (taskId != null) {
                             logListToShow = logList
                                 .where((element) => element.taskId == taskId)
