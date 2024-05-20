@@ -92,9 +92,9 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     setState(() {
       sortAscending = ascending;
       if (ascending) {
-        filteredTaskList.sort((a, b) => a.id.compareTo(b.id));
+        filteredTaskList.sort((a, b) => a.expDte.compareTo(b.expDte));
       } else {
-        filteredTaskList.sort((a, b) => b.id.compareTo(a.id));
+        filteredTaskList.sort((a, b) => b.expDte.compareTo(a.expDte));
       }
     });
   }
@@ -322,14 +322,14 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                           ),
                           const DataColumn(
                             label: Text(
-                              'Task Description',
+                              'Task description',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600, fontSize: 14),
                             ),
                           ),
                           const DataColumn(
                             label: Text(
-                              'ID',
+                              'Id',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600, fontSize: 14),
                             ),

@@ -2,17 +2,23 @@ import 'package:flutter_website_aaron/app/framework/imodel.dart';
 import 'package:intl/intl.dart';
 
 class Warning extends IModel {
-  final String date;
-  final String customer;
   final int id;
-  final String description;
+  final int taskId;
+  final String taskDescription;
+  final String date;
+  final String error;
+  final int buyerId;
+  final String buyerName;
   final int sellerId;
 
   Warning({
-    required this.date,
-    required this.customer,
     required this.id,
-    required this.description,
+    required this.taskId,
+    required this.taskDescription,
+    required this.date,
+    required this.error,
+    required this.buyerId,
+    required this.buyerName,
     required this.sellerId,
   });
 
@@ -20,9 +26,11 @@ class Warning extends IModel {
   Map<String, dynamic> toJson() {
     return {
       'date': date,
-      'customer': customer,
+      'taskDescription': taskDescription,
       'id': id,
-      'description': description,
+      'buyer_id': buyerId,
+      'buyer_name': buyerName,
+      'error': error,
     };
   }
 
@@ -35,9 +43,12 @@ class Warning extends IModel {
           : DateFormat('MM/dd/yyyy')
               .add_jm()
               .format(DateTime.parse(json['created_at'])),
-      customer: json['category'] ?? '',
+      taskDescription: json['message'],
       id: json['id'] ?? '',
-      description: json['message'] ?? '',
+      error: json['category'] ?? '',
+      taskId: json['task_id'] ?? '',
+      buyerId: json['buyer_id'] ?? -1,
+      buyerName: json['buyer_name'] ?? '',
       sellerId: json['seller_id'] ?? -1,
     );
   }

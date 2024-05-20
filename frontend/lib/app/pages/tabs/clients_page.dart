@@ -251,14 +251,21 @@ class _ClientsPageState extends State<ClientsPage> {
                                       .toString()
                                       .toLowerCase()
                                       .contains(value.toLowerCase()) ||
-                                  element.customer
+                                  element.taskDescription
                                       .toLowerCase()
                                       .contains(value.toLowerCase()) ||
                                   element.id
                                       .toString()
                                       .toLowerCase()
                                       .contains(value.toLowerCase()) ||
-                                  element.description
+                                  element.buyerId
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()) ||
+                                  element.buyerName
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()) ||
+                                  element.error
                                       .toLowerCase()
                                       .contains(value.toLowerCase()),
                             )
@@ -423,7 +430,7 @@ class _ClientsPageState extends State<ClientsPage> {
       ),
       const DataColumn(
         label: Text(
-          'Customer',
+          'Task description',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 14,
@@ -432,7 +439,7 @@ class _ClientsPageState extends State<ClientsPage> {
       ),
       const DataColumn(
         label: Text(
-          'ID',
+          'Id',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 14,
@@ -441,7 +448,25 @@ class _ClientsPageState extends State<ClientsPage> {
       ),
       const DataColumn(
         label: Text(
-          'Description',
+          'Client id',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+        ),
+      ),
+      const DataColumn(
+        label: Text(
+          'Client name',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+        ),
+      ),
+      const DataColumn(
+        label: Text(
+          'Error',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 14,
