@@ -24,7 +24,6 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   List<Task> taskList = List.empty(growable: true);
   List<Task> filteredTaskList = List.empty(growable: true);
   List<Log> logList = List.empty(growable: true);
-  List<Log> filteredLogList = List.empty(growable: true);
 
   bool sortAscending = false;
   bool sortLogAscending = false;
@@ -48,7 +47,6 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
       taskList = orders;
       filteredTaskList = orders;
       logList = logs;
-      filteredLogList = logs;
       _isAdmin = isAdmin;
       _currentUser = currentUser;
       _isLoading = false;
@@ -88,34 +86,6 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
           )
           .toList();
       key.currentState?.pageTo(0);
-    });
-  }
-
-  _filterLogs(String value) {
-    setState(() {
-      filteredLogList = logList
-          .where(
-            (element) =>
-                element.date
-                    .toString()
-                    .toLowerCase()
-                    .contains(value.toLowerCase()) ||
-                element.taskDescription
-                    .toLowerCase()
-                    .contains(value.toLowerCase()) ||
-                element.id
-                    .toString()
-                    .toLowerCase()
-                    .contains(value.toLowerCase()) ||
-                element.buyerId
-                    .toString()
-                    .toLowerCase()
-                    .contains(value.toLowerCase()) ||
-                element.buyerName.toLowerCase().contains(value.toLowerCase()) ||
-                element.error.toLowerCase().contains(value.toLowerCase()),
-          )
-          .toList();
-      logKey.currentState?.pageTo(0);
     });
   }
 
@@ -257,7 +227,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                     controller: _logSearchController,
                     onChanged: (value) {
                       setState(() {
-                        logListToShow = logList
+                        logListToShow = logListToShow
                             .where(
                               (element) =>
                                   element.date
