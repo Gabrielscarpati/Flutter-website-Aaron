@@ -26,8 +26,8 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   List<Log> logList = List.empty(growable: true);
   List<Log> filteredLogList = List.empty(growable: true);
 
-  bool sortAscending = true;
-  bool sortLogAscending = true;
+  bool sortAscending = false;
+  bool sortLogAscending = false;
   bool _isLoading = true;
   bool _isAdmin = false;
   User _currentUser = User.empty();

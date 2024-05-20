@@ -415,7 +415,7 @@ class _ClientsPageState extends State<ClientsPage> {
             fontSize: 14,
           ),
         ),
-        onSort: (columnIndex, _) {
+        onSort: (columnIndex, ascending) {
           setState(() {
             _sortWarningsColumn(columnIndex, sortWarningsAscending);
           });
