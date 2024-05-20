@@ -30,8 +30,8 @@ class _ClientsPageState extends State<ClientsPage> {
   List<Warning> warnings = List.empty(growable: true);
   List<Warning> filteredWarnings = List.empty(growable: true);
 
-  bool sortClientsAscending = true;
-  bool sortWarningsAscending = true;
+  bool sortClientsAscending = false;
+  bool sortWarningsAscending = false;
   bool _isLoading = true;
 
   final TextEditingController _searchController = TextEditingController();
@@ -87,27 +87,6 @@ class _ClientsPageState extends State<ClientsPage> {
           )
           .toList();
       key.currentState?.pageTo(0);
-    });
-  }
-
-  void _filterWarnings(String value) {
-    setState(() {
-      filteredWarnings = warnings
-          .where(
-            (element) =>
-                element.date
-                    .toString()
-                    .toLowerCase()
-                    .contains(value.toLowerCase()) ||
-                element.customer.toLowerCase().contains(value.toLowerCase()) ||
-                element.id
-                    .toString()
-                    .toLowerCase()
-                    .contains(value.toLowerCase()) ||
-                element.description.toLowerCase().contains(value.toLowerCase()),
-          )
-          .toList();
-      warningKey.currentState?.pageTo(0);
     });
   }
 
@@ -357,9 +336,9 @@ class _ClientsPageState extends State<ClientsPage> {
             fontSize: 14,
           ),
         ),
-        onSort: (columnIndex, ascending) {
+        onSort: (columnIndex, _) {
           setState(() {
-            _sortClientsColumn(columnIndex, ascending);
+            _sortClientsColumn(columnIndex, sortClientsAscending);
           });
         },
       ),
@@ -436,9 +415,9 @@ class _ClientsPageState extends State<ClientsPage> {
             fontSize: 14,
           ),
         ),
-        onSort: (columnIndex, ascending) {
+        onSort: (columnIndex, _) {
           setState(() {
-            _sortWarningsColumn(columnIndex, ascending);
+            _sortWarningsColumn(columnIndex, sortWarningsAscending);
           });
         },
       ),
