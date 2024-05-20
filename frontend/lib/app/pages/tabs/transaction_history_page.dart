@@ -292,7 +292,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                       child: PaginatedDataTable(
                         key: logKey,
                         showCheckboxColumn: false,
-                        sortColumnIndex: _isAdmin ? 1 : 0,
+                        sortColumnIndex: 0,
                         sortAscending: sortLogAscending,
                         source: RowSource<Log>(
                           dataList: logListToShow,
