@@ -9,6 +9,7 @@ class LogsController {
         .where(`log.task_id = ${queueId} and log.category = 'Error'`)
         .join("queue", "queue.id = log.task_id")
         .join("seller", "seller.id = queue.seller_id")
+        .orderBy("log.created_at desc")
         .execute();
     }
 
@@ -17,6 +18,7 @@ class LogsController {
       .join("buyer", "buyer.id = queue.ukey")
       .join("seller", "seller.id = queue.seller_id")
       .where("category = 'Error'")
+      .orderBy("log.created_at desc")
       .execute();
   }
 }
