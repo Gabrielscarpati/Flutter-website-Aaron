@@ -244,6 +244,10 @@ class _ClientsPageState extends State<ClientsPage> {
                     controller: _warningSearchController,
                     onChanged: (value) {
                       setState(() {
+                        if (filteredWarnings.isEmpty) {
+                          filteredWarnings = warnings;
+                          return;
+                        }
                         filteredWarnings = filteredWarnings
                             .where(
                               (element) =>

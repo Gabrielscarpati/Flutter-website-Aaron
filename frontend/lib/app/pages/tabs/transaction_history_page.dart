@@ -205,7 +205,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
       logListToShow =
           logList.where((element) => element.taskId == taskId).toList();
     } else if (!_isAdmin) {
-      logListToShow = logListToShow
+      logListToShow = logList
           .where((element) => element.sellerId == _currentUser.sellerId)
           .toList();
     }
@@ -227,6 +227,25 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                     controller: _logSearchController,
                     onChanged: (value) {
                       setState(() {
+                        if (logListToShow.isEmpty) {
+                          if (taskId != null) {
+                            logListToShow = logList
+                                .where((element) => element.taskId == taskId)
+                                .toList();
+                            return;
+                          }
+
+                          if (!_isAdmin) {
+                            logListToShow = logList
+                                .where((element) =>
+                                    element.sellerId == _currentUser.sellerId)
+                                .toList();
+                            return;
+                          }
+
+                          logListToShow = logList;
+                          return;
+                        }
                         logListToShow = logListToShow
                             .where(
                               (element) =>
@@ -280,7 +299,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                             element.taskId == taskId)
                                         .toList();
                                   } else if (!_isAdmin) {
-                                    logListToShow = logListToShow
+                                    logListToShow = logList
                                         .where((element) =>
                                             element.sellerId ==
                                             _currentUser.sellerId)
