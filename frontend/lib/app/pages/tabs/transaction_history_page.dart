@@ -200,9 +200,11 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   _dialogContent({int? taskId}) {
     List<Log> logListToShow = logList;
 
+    final List<Log> logListByTasks =
+        logList.where((element) => element.taskId == taskId).toList();
+
     if (taskId != null) {
-      logListToShow =
-          logList.where((element) => element.taskId == taskId).toList();
+      logListToShow = logListByTasks;
     }
 
     return StatefulBuilder(
@@ -222,32 +224,33 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                     controller: _logSearchController,
                     onChanged: (value) {
                       setState(() {
-                        logListToShow = logList
-                            .where(
-                              (element) =>
-                                  element.date
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase()) ||
-                                  element.taskDescription
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase()) ||
-                                  element.id
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase()) ||
-                                  element.buyerId
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase()) ||
-                                  element.buyerName
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase()) ||
-                                  element.error
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase()),
-                            )
-                            .toList();
+                        logListToShow =
+                            (taskId != null ? logListByTasks : logList)
+                                .where(
+                                  (element) =>
+                                      element.date
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()) ||
+                                      element.taskDescription
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()) ||
+                                      element.id
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()) ||
+                                      element.buyerId
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()) ||
+                                      element.buyerName
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()) ||
+                                      element.error
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()),
+                                )
+                                .toList();
                         logKey.currentState?.pageTo(0);
                       });
                     },
@@ -270,10 +273,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                 setState(() {
                                   _logSearchController.clear();
                                   if (taskId != null) {
-                                    logListToShow = logList
-                                        .where((element) =>
-                                            element.taskId == taskId)
-                                        .toList();
+                                    logListToShow = logListByTasks;
                                     return;
                                   }
 
