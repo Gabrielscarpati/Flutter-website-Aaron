@@ -31,10 +31,16 @@ class ClientsPageController {
     return list;
   }
 
-  Future<List<Warning>> getWarnings() async {
+  Future<List<Warning>> getWarnings(int? sellerId) async {
     final result = await ApiConnection.instance.get(path: constants.logs);
     final response = result['response'] as List;
-    final list = response.map((e) => Warning.fromJson(e)).toList();
-    return list;
+    final wholeList = response.map((e) => Warning.fromJson(e)).toList();
+    if (sellerId == null) {
+      return wholeList;
+    }
+
+    final filteredList =
+        wholeList.where((log) => log.sellerId == sellerId).toList();
+    return filteredList;
   }
 }

@@ -30,7 +30,7 @@ class _ClientsPageState extends State<ClientsPage> {
   List<Warning> warnings = List.empty(growable: true);
   List<Warning> filteredWarnings = List.empty(growable: true);
 
-  bool sortClientsAscending = false;
+  bool sortClientsAscending = true;
   bool sortWarningsAscending = false;
   bool _isLoading = true;
 
@@ -43,7 +43,7 @@ class _ClientsPageState extends State<ClientsPage> {
 
   _initRequests() async {
     final buyers = await _controller.getBuyers(widget.sellerId);
-    final warningsApi = await _controller.getWarnings();
+    final warningsApi = await _controller.getWarnings(widget.sellerId);
     final currentUser = await _userController.getCurrentUser();
     final isAdmin = await _userController.currentUserIsAdmin();
 
