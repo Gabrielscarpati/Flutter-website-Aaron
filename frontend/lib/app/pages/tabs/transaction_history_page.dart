@@ -3,7 +3,6 @@ import 'package:flutter_website_aaron/app/components/loading_component.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/log.dart';
 import 'package:flutter_website_aaron/app/models/task.dart';
-import 'package:flutter_website_aaron/app/models/user.dart';
 import 'package:flutter_website_aaron/app/pages/pages_controllers/tabs_controllers/transaction_history_page_controller.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 import 'package:flutter_website_aaron/app/shared/user_controller.dart';
@@ -29,7 +28,6 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   bool sortLogAscending = false;
   bool _isLoading = true;
   bool _isAdmin = false;
-  User _currentUser = User.empty();
 
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _logSearchController = TextEditingController();
@@ -46,9 +44,10 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     setState(() {
       taskList = orders;
       filteredTaskList = orders;
-      logList = logs;
+      logList = isAdmin
+          ? logs
+          : logs.where((log) => currentUser.sellerId == log.sellerId).toList();
       _isAdmin = isAdmin;
-      _currentUser = currentUser;
       _isLoading = false;
     });
   }
@@ -204,10 +203,6 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     if (taskId != null) {
       logListToShow =
           logList.where((element) => element.taskId == taskId).toList();
-    } else if (!_isAdmin) {
-      logListToShow = logList
-          .where((element) => element.sellerId == _currentUser.sellerId)
-          .toList();
     }
 
     return StatefulBuilder(
@@ -227,26 +222,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                     controller: _logSearchController,
                     onChanged: (value) {
                       setState(() {
-                        if (_logSearchController.text.isEmpty) {
-                          if (taskId != null) {
-                            logListToShow = logList
-                                .where((element) => element.taskId == taskId)
-                                .toList();
-                            return;
-                          }
-
-                          if (!_isAdmin) {
-                            logListToShow = logList
-                                .where((element) =>
-                                    element.sellerId == _currentUser.sellerId)
-                                .toList();
-                            return;
-                          }
-
-                          logListToShow = logList;
-                          return;
-                        }
-                        logListToShow = logListToShow
+                        logListToShow = logList
                             .where(
                               (element) =>
                                   element.date
@@ -298,15 +274,10 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                         .where((element) =>
                                             element.taskId == taskId)
                                         .toList();
-                                  } else if (!_isAdmin) {
-                                    logListToShow = logList
-                                        .where((element) =>
-                                            element.sellerId ==
-                                            _currentUser.sellerId)
-                                        .toList();
-                                  } else {
-                                    logListToShow = logList;
+                                    return;
                                   }
+
+                                  logListToShow = logList;
                                 });
                               })
                           : null,
