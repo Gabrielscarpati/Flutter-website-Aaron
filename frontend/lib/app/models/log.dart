@@ -9,6 +9,7 @@ class Log extends IModel {
   final String error;
   final int buyerId;
   final String buyerName;
+  final int sellerId;
 
   Log({
     required this.id,
@@ -18,6 +19,7 @@ class Log extends IModel {
     required this.error,
     required this.buyerId,
     required this.buyerName,
+    required this.sellerId,
   });
 
   @override
@@ -47,6 +49,7 @@ class Log extends IModel {
       taskId: json['task_id'] ?? '',
       buyerId: json['buyer_id'] ?? -1,
       buyerName: json['buyer_name'] ?? '',
+      sellerId: json['seller_id'] ?? -1,
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_website_aaron/app/models/buyer.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/warning.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
+import 'package:flutter_website_aaron/app/shared/user_controller.dart';
 
 import '../pages_controllers/tabs_controllers/clients_page_controller.dart';
 
@@ -12,9 +13,9 @@ class ClientsPage extends StatefulWidget {
   final int? sellerId;
 
   const ClientsPage({
-    Key? key,
+    super.key,
     this.sellerId,
-  }) : super(key: key);
+  });
 
   @override
   State<ClientsPage> createState() => _ClientsPageState();
@@ -22,28 +23,38 @@ class ClientsPage extends StatefulWidget {
 
 class _ClientsPageState extends State<ClientsPage> {
   final _controller = ClientsPageController.instance;
+  final _userController = UserController.instance;
 
   List<Buyer> clients = List.empty(growable: true);
+  List<Warning> warnings = List.empty(growable: true);
+  List<Warning> filteredWarnings = List.empty(growable: true);
 
   bool sort = true;
-  List<Buyer> filterData = [];
-  final TextEditingController _searchController = TextEditingController();
-
-  List<Warning> warnings = List.empty(growable: true);
-
   bool _isLoading = true;
 
+  List<Buyer> filterData = [];
+  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _warningSearchController =
+      TextEditingController();
+
   final key = GlobalKey<PaginatedDataTableState>();
+  final warningKey = GlobalKey<PaginatedDataTableState>();
 
   _initRequests() async {
     final buyers = await _controller.getBuyers(widget.sellerId);
-
     final warningsApi = await _controller.getWarnings();
+    final currentUser = await _userController.getCurrentUser();
+    final isAdmin = await _userController.currentUserIsAdmin();
 
     if (mounted) {
       setState(() {
         clients = buyers;
-        warnings = warningsApi;
+        warnings = isAdmin
+            ? warningsApi
+            : warningsApi
+                .where((element) => element.sellerId == currentUser.sellerId)
+                .toList();
+        filteredWarnings = warningsApi;
         filterData = clients;
         _isLoading = false;
       });
@@ -54,6 +65,22 @@ class _ClientsPageState extends State<ClientsPage> {
   void initState() {
     _initRequests();
     super.initState();
+  }
+
+  sortColumn(int columnIndex, bool ascending) {
+    if (ascending) {
+      clients.sort((a, b) => a.id.compareTo(b.id));
+    } else {
+      clients.sort((a, b) => b.id.compareTo(a.id));
+    }
+  }
+
+  sortWarningColumn(int columnIndex, bool ascending) {
+    if (ascending) {
+      filteredWarnings.sort((a, b) => a.date.compareTo(b.date));
+    } else {
+      filteredWarnings.sort((a, b) => b.date.compareTo(a.date));
+    }
   }
 
   @override
@@ -277,66 +304,127 @@ class _ClientsPageState extends State<ClientsPage> {
             color: Theme.of(context).canvasColor,
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
-          child: SizedBox(
-            width: double.infinity,
-            child: Theme(
-              data: ThemeData.light().copyWith(
-                cardColor: Theme.of(context).canvasColor,
-              ),
-              child: PaginatedDataTable(
-                showCheckboxColumn: false,
-                sortColumnIndex: 0,
-                sortAscending: sort,
-                source: RowSource<Warning>(
-                  dataList: warnings,
-                  count: warnings.length,
+          child: Column(
+            children: [
+              TextField(
+                controller: _warningSearchController,
+                onChanged: (value) {
+                  setState(() {
+                    filteredWarnings = warnings
+                        .where(
+                          (element) =>
+                              element.date
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()) ||
+                              element.customer
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()) ||
+                              element.id
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()) ||
+                              element.description
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()),
+                        )
+                        .toList();
+                    warningKey.currentState?.pageTo(0);
+                  });
+                },
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.secondaryColor.withOpacity(0.3),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  hintText: "Search in warnings",
+                  prefixIcon: const Icon(Icons.search),
+                  prefixIconColor: Colors.black,
+                  suffixIcon: _warningSearchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.close, color: Colors.black),
+                          onPressed: () async {
+                            setState(() {
+                              _warningSearchController.clear();
+                              filteredWarnings = warnings;
+                            });
+                          })
+                      : null,
                 ),
-                rowsPerPage: warnings.length > 8
-                    ? 8
-                    : warnings.isEmpty
-                        ? 1
-                        : warnings.length,
-                columnSpacing: 8,
-                columns: const [
-                  DataColumn(
-                    label: Text(
-                      'Date',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Customer',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'ID',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Description',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                ],
               ),
-            ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: Theme(
+                  data: ThemeData.light().copyWith(
+                    cardColor: Theme.of(context).canvasColor,
+                  ),
+                  child: PaginatedDataTable(
+                    key: warningKey,
+                    showCheckboxColumn: false,
+                    sortColumnIndex: 0,
+                    sortAscending: sort,
+                    source: RowSource<Warning>(
+                      dataList: filteredWarnings,
+                      count: filteredWarnings.length,
+                    ),
+                    rowsPerPage: filteredWarnings.length > 8
+                        ? 8
+                        : filteredWarnings.isEmpty
+                            ? 1
+                            : filteredWarnings.length,
+                    columnSpacing: 8,
+                    columns: [
+                      DataColumn(
+                        label: const Text(
+                          'Date',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                        onSort: ((columnIndex, ascending) {
+                          setState(() {
+                            sort = !sort;
+                            sortWarningColumn(columnIndex, ascending);
+                          });
+                        }),
+                      ),
+                      const DataColumn(
+                        label: Text(
+                          'Customer',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      const DataColumn(
+                        label: Text(
+                          'ID',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      const DataColumn(
+                        label: Text(
+                          'Description',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

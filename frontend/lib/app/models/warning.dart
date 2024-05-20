@@ -6,12 +6,15 @@ class Warning extends IModel {
   final String customer;
   final int id;
   final String description;
+  final int sellerId;
 
-  Warning(
-      {required this.date,
-      required this.customer,
-      required this.id,
-      required this.description});
+  Warning({
+    required this.date,
+    required this.customer,
+    required this.id,
+    required this.description,
+    required this.sellerId,
+  });
 
   @override
   Map<String, dynamic> toJson() {
@@ -34,7 +37,8 @@ class Warning extends IModel {
               .format(DateTime.parse(json['created_at'])),
       customer: json['category'] ?? '',
       id: json['id'] ?? '',
-      description: json['message'],
+      description: json['message'] ?? '',
+      sellerId: json['seller_id'] ?? -1,
     );
   }
 }

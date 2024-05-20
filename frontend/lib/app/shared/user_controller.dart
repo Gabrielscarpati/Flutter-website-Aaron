@@ -18,7 +18,7 @@ class UserController {
   }
 
   Future<User> getCurrentUser() async {
-    return _getCurrentUserModel();
+    return await _getCurrentUserModel();
   }
 
   Future<String> getCurrentSellerName() async {

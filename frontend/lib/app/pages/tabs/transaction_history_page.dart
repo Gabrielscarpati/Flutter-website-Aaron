@@ -3,6 +3,7 @@ import 'package:flutter_website_aaron/app/components/loading_component.dart';
 import 'package:flutter_website_aaron/app/models/dataTable/row_source.dart';
 import 'package:flutter_website_aaron/app/models/log.dart';
 import 'package:flutter_website_aaron/app/models/task.dart';
+import 'package:flutter_website_aaron/app/models/user.dart';
 import 'package:flutter_website_aaron/app/pages/pages_controllers/tabs_controllers/transaction_history_page_controller.dart';
 import 'package:flutter_website_aaron/app/shared/app_design_system.dart';
 import 'package:flutter_website_aaron/app/shared/user_controller.dart';
@@ -22,12 +23,14 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
 
   List<Task> taskList = List.empty(growable: true);
   List<Log> logList = List.empty(growable: true);
-  bool sort = true;
+  bool sort = false;
   List<Task> filterData = [];
   bool _isLoading = true;
   bool _isAdmin = false;
+  User _currentUser = User.empty();
 
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _logSearchController = TextEditingController();
 
   final key = GlobalKey<PaginatedDataTableState>();
 
@@ -39,16 +42,26 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     }
   }
 
+  sortLogColumn(int columnIndex, bool ascending) {
+    if (ascending) {
+      logList.sort((a, b) => a.date.compareTo(b.date));
+    } else {
+      logList.sort((a, b) => b.date.compareTo(a.date));
+    }
+  }
+
   _getOrders() async {
     final orders = await _controller.getTasks();
     final logs = await _controller.getLogs();
     final isAdmin = await _userController.currentUserIsAdmin();
+    final currentUser = await _userController.getCurrentUser();
 
     setState(() {
       taskList = orders;
       _isAdmin = isAdmin;
       logList = logs;
       filterData = orders;
+      _currentUser = currentUser;
       _isLoading = false;
     });
   }
@@ -161,7 +174,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                       child: PaginatedDataTable(
                         key: key,
                         showCheckboxColumn: false,
-                        sortColumnIndex: 0,
+                        sortColumnIndex: _isAdmin ? 1 : 0,
                         sortAscending: sort,
                         source: RowSource<Task>(
                             dataList: taskList,
@@ -186,13 +199,17 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   }
 
   _dialogContent({int? taskId}) {
-    final List<Log> logListToShow;
+    List<Log> logListToShow;
 
     if (taskId != null) {
       logListToShow =
           logList.where((element) => element.taskId == taskId).toList();
-    } else {
+    } else if (_isAdmin) {
       logListToShow = logList;
+    } else {
+      logListToShow = logList
+          .where((element) => element.sellerId == _currentUser.sellerId)
+          .toList();
     }
 
     return Scaffold(
@@ -203,67 +220,135 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
             color: Theme.of(context).canvasColor,
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
-          child: SizedBox(
-            width: double.infinity,
-            child: Theme(
-                data: ThemeData.light()
-                    .copyWith(cardColor: Theme.of(context).canvasColor),
-                child: PaginatedDataTable(
-                  showCheckboxColumn: false,
-                  sortColumnIndex: 0,
-                  sortAscending: sort,
-                  source: RowSource<Log>(
-                    dataList: logListToShow,
-                    count: logListToShow.length,
+          child: Column(
+            children: [
+              TextField(
+                controller: _logSearchController,
+                onChanged: (value) {
+                  setState(() {
+                    logListToShow = logList
+                        .where(
+                          (element) =>
+                              element.date
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()) ||
+                              element.taskDescription
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()) ||
+                              element.id
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()) ||
+                              element.buyerId
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()) ||
+                              element.buyerName
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()) ||
+                              element.error
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()),
+                        )
+                        .toList();
+                    key.currentState!.pageTo(0);
+                  });
+                },
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.secondaryColor.withOpacity(0.3),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
                   ),
-                  rowsPerPage: logListToShow.length > 8
-                      ? 8
-                      : logListToShow.isEmpty
-                          ? 1
-                          : logListToShow.length,
-                  columnSpacing: 8,
-                  columns: const [
-                    DataColumn(
-                      label: Text(
-                        'Date',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 14),
-                      ),
+                  hintText: "Search in logs",
+                  prefixIcon: const Icon(Icons.search),
+                  prefixIconColor: Colors.black,
+                  suffixIcon: _logSearchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.close, color: Colors.black),
+                          onPressed: () async {
+                            setState(() {
+                              _logSearchController.clear();
+                              logListToShow = logList;
+                            });
+                          })
+                      : null,
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: Theme(
+                  data: ThemeData.light()
+                      .copyWith(cardColor: Theme.of(context).canvasColor),
+                  child: PaginatedDataTable(
+                    showCheckboxColumn: false,
+                    sortColumnIndex: 0,
+                    sortAscending: sort,
+                    source: RowSource<Log>(
+                      dataList: logListToShow,
+                      count: logListToShow.length,
                     ),
-                    DataColumn(
-                        label: Text(
-                      'Task Description',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                    )),
-                    DataColumn(
-                        label: Text(
-                      'ID',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                    )),
-                    DataColumn(
-                        label: Text(
-                      'Client id',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                    )),
-                    DataColumn(
-                        label: Text(
-                      'Client name',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                    )),
-                    DataColumn(
-                        label: Center(
-                      child: Text(
-                        'Error',
+                    rowsPerPage: logListToShow.length > 8
+                        ? 8
+                        : logListToShow.isEmpty
+                            ? 1
+                            : logListToShow.length,
+                    columnSpacing: 8,
+                    columns: [
+                      DataColumn(
+                        label: const Text(
+                          'Date',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 14),
+                        ),
+                        onSort: ((columnIndex, ascending) {
+                          setState(() {
+                            sort = !sort;
+                            sortLogColumn(columnIndex, ascending);
+                          });
+                        }),
+                      ),
+                      const DataColumn(
+                          label: Text(
+                        'Task Description',
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 14),
-                      ),
-                    )),
-                  ],
-                )),
+                      )),
+                      const DataColumn(
+                          label: Text(
+                        'ID',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 14),
+                      )),
+                      const DataColumn(
+                          label: Text(
+                        'Client id',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 14),
+                      )),
+                      const DataColumn(
+                          label: Text(
+                        'Client name',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 14),
+                      )),
+                      const DataColumn(
+                          label: Center(
+                        child: Text(
+                          'Error',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 14),
+                        ),
+                      )),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
