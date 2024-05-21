@@ -314,8 +314,8 @@ class _ClientsPageState extends State<ClientsPage> {
                           dataList: filteredWarnings,
                           count: filteredWarnings.length,
                         ),
-                        rowsPerPage: filteredWarnings.length > 8
-                            ? 8
+                        rowsPerPage: filteredWarnings.length > 7
+                            ? 7
                             : filteredWarnings.isEmpty
                                 ? 1
                                 : filteredWarnings.length,
