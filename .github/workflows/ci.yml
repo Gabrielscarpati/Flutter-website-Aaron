@@ -31,6 +31,8 @@ jobs:
             cd ..
             cd Flutter-website-Aaron
             sudo git pull
+            sudo docker-compose run --rm --entrypoint "certbot certonly --webroot --webroot-path=/var/www/certbot --email admin@stage.evedi.io --agree-tos --no-eff-email -d stage.evedi.io" certbot
+            docker-compose down
             sudo docker-compose up --build -d
             exit
           EOF
