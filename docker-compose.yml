@@ -29,12 +29,13 @@ services:
     image: caddy:latest
     restart: always
     ports:
-      - "8081:80"
-      - "8443:443"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
+      - ./acme-challenge:/usr/share/caddy/acme-challenge
     networks:
       - edi_dash_network
     depends_on:

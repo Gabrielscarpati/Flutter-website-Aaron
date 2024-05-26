@@ -1,14 +1,28 @@
 {
-    email admin@stage.evedi.io
+    email your-email@stage.evedi.io
 }
 
-stage.evedi.io {
-    handle_path /api* {
-        reverse_proxy edi_dash_api:5050
+stage.evedi.io, www.stage.evedi.io {
+    root * /usr/share/caddy
+    file_server
+
+    handle /.well-known/acme-challenge/* {
+        root * /usr/share/caddy/acme-challenge
+        file_server
     }
-    reverse_proxy /* flutter_web:80
-    
+
+    handle_path /api* {
+        reverse_proxy http://edi_dash_api:5050
+    }
+
+    reverse_proxy /* http://flutter_web:80
+
     encode gzip
 
-    file_server
+    tls {
+        issuer acme {
+            email your-email@stage.evedi.io
+            challenge http
+        }
+    }
 }
