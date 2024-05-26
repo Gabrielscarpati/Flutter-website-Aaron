@@ -18,11 +18,4 @@ stage.evedi.io, www.stage.evedi.io {
     reverse_proxy /* http://flutter_web:80
 
     encode gzip
-
-    tls {
-        issuer acme {
-            email your-email@stage.evedi.io
-            challenge http
-        }
-    }
 }
