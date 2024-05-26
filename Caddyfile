@@ -2,7 +2,7 @@
     email admin@stage.evedi.io
 }
 
-stage.evedi.io, www.stage.evedi.io {
+stage.evedi.io {
     handle_path /api* {
         reverse_proxy edi_dash_api:5050
     }
