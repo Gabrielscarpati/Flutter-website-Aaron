@@ -44,7 +44,6 @@ services:
 networks:
   edi_dash_network:
     driver: bridge
-    external: true
 
 volumes:
   caddy_data:
