@@ -1,0 +1,14 @@
+{
+    email admin@stage.evedi.io
+}
+
+stage.evedi.io, www.stage.evedi.io {
+    handle_path /api* {
+        reverse_proxy edi_dash_api:5050
+    }
+    reverse_proxy /* flutter_web:80
+    
+    encode gzip
+
+    file_server
+}

@@ -5,7 +5,7 @@ services:
     container_name: flutter_web
     image: nginx:alpine
     ports:
-      - "8080:8080"
+      - "8080:80"
     networks:
       - edi_dash_network
     volumes:
@@ -24,32 +24,28 @@ services:
     networks:
       - edi_dash_network
 
-  nginx:
-    container_name: nginx
+  caddy:
+    container_name: caddy
+    image: caddy:latest
     restart: always
-    build: 
-      context: ./nginx
-      dockerfile: Dockerfile
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/certbot/conf:/etc/letsencrypt
-      - ./nginx/certbot/www:/var/www/certbot
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
     networks:
       - edi_dash_network
     depends_on:
       - edi_dash_api 
       - flutter_web
 
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./nginx/certbot/conf:/etc/letsencrypt
-      - ./nginx/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 6h & wait $${!}; certbot renew; done'"
-
 networks:
   edi_dash_network:
     driver: bridge
+    external: true
+
+volumes:
+  caddy_data:
+  caddy_config:
