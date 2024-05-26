@@ -2,7 +2,7 @@
     email your-email@stage.evedi.io
 }
 
-stage.evedi.io, www.stage.evedi.io {
+stage.evedi.io {
     root * /usr/share/caddy
     file_server
 
